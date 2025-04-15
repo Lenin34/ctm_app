@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, StyleProp, ImageStyle, StyleSheet, Dimensions } from 'react-native';
 // @ts-ignore
 import logoCTM from '../../assets/images/logo_ctm.png';
-
+import { vs, mvs } from 'react-native-size-matters';
 const { width } = Dimensions.get('window');
 
 type Props = {
@@ -11,9 +11,9 @@ type Props = {
 };
 
 const sizes = {
-    sm: width * 0.2,
-    md: width * 0.3,
-    lg: width * 0.4,
+    sm: mvs(50, 0.5),
+    md: mvs(100, 0.5),
+    lg: mvs(150, 0.5),
 };
 
 export default function LogoCTM({ size = 'md', style }: Props) {
@@ -31,6 +31,5 @@ export default function LogoCTM({ size = 'md', style }: Props) {
 const styles = StyleSheet.create({
     logo: {
         alignSelf: 'center',
-        marginBottom: 20,
     },
 });

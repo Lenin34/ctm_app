@@ -7,7 +7,7 @@ import {
     KeyboardAvoidingView,
     Platform,
     View,
-    StyleSheet,
+    StyleSheet, SafeAreaView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,6 +16,7 @@ import { loginStyles as styles } from '../styles/loginStyles';
 import { Gradients } from '../constants/theme';
 import { useValidation, ValidationErrors } from '../hooks/useValidation';
 import LogoCTM from '../components/LogoCTM';
+import { vs} from 'react-native-size-matters';
 
 export default function Login({ navigation }: any) {
     const [email, setEmail] = useState('');
@@ -38,81 +39,83 @@ export default function Login({ navigation }: any) {
     };
 
     return (
-        <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        >
-            <View style={styles.wrapper}>
-                <LinearGradient
-                    colors={Gradients.greenish}
-                    style={StyleSheet.absoluteFillObject}
-                />
-                <ScrollView
-                    contentContainerStyle={styles.scrollContainer}
-                    keyboardShouldPersistTaps="handled"
-                >
-                    <LogoCTM />
-
-                    <Text style={styles.title}>INICIO DE SESIÓN</Text>
-
-                    <Text style={styles.label}>USUARIO</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={email}
-                        onChangeText={(text) => {
-                            setEmail(text);
-                            if (errors.email) setErrors({ ...errors, email: undefined });
-                        }}
-                        placeholder="Correo electrónico"
-                        placeholderTextColor="#aaa"
-                        autoCapitalize="none"
+        <SafeAreaView style={{flex: 1, backgroundColor: '#111921'}} edges={['top']}>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            >
+                <View style={styles.wrapper}>
+                    <LinearGradient
+                        colors={Gradients.greenish}
+                        style={StyleSheet.absoluteFillObject}
                     />
-                    {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+                    <ScrollView
+                        contentContainerStyle={styles.scrollContainer}
+                        keyboardShouldPersistTaps="handled"
+                    >
+                        <LogoCTM />
 
-                    <Text style={styles.label}>CONTRASEÑA</Text>
-                    <View style={styles.inputContainer}>
+                        <Text style={styles.title}>LOGIN</Text>
+
+                        <Text style={styles.label}>USUARIO</Text>
                         <TextInput
-                            style={[styles.input, { paddingRight: 40 }]}
-                            value={password}
+                            style={styles.input}
+                            value={email}
                             onChangeText={(text) => {
-                                setPassword(text);
-                                if (errors.password) setErrors({ ...errors, password: undefined });
+                                setEmail(text);
+                                if (errors.email) setErrors({ ...errors, email: undefined });
                             }}
-                            placeholder="Contraseña"
+                            placeholder="Correo electrónico"
                             placeholderTextColor="#aaa"
-                            secureTextEntry={!showPassword}
+                            autoCapitalize="none"
                         />
-                        <TouchableOpacity
-                            style={styles.iconOverlay}
-                            onPress={() => setShowPassword(!showPassword)}
-                        >
-                            <Ionicons
-                                name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                                size={22}
-                                color="#333"
+                        {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+
+                        <Text style={styles.label}>CONTRASEÑA</Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={[styles.input]}
+                                value={password}
+                                onChangeText={(text) => {
+                                    setPassword(text);
+                                    if (errors.password) setErrors({ ...errors, password: undefined });
+                                }}
+                                placeholder="Contraseña"
+                                placeholderTextColor="#aaa"
+                                secureTextEntry={!showPassword}
                             />
+                            <TouchableOpacity
+                                style={styles.iconOverlay}
+                                onPress={() => setShowPassword(!showPassword)}
+                            >
+                                <Ionicons
+                                    name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                                    size={vs(15)}
+                                    color="#333"
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        {errors.password && (
+                            <Text style={styles.errorText}>{errors.password}</Text>
+                        )}
+
+                        <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+                            <Text style={styles.loginText}>INGRESAR</Text>
                         </TouchableOpacity>
-                    </View>
-                    {errors.password && (
-                        <Text style={styles.errorText}>{errors.password}</Text>
-                    )}
 
-                    <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-                        <Text style={styles.loginText}>INGRESAR</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity>
-                        <Text style={styles.link}>Olvidé mi contraseña</Text>
-                    </TouchableOpacity>
-
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 15 }}>
-                        <Text style={styles.registerText}>¿No tienes cuenta? </Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                            <Text style={styles.registerLink}>Regístrate</Text>
+                        <TouchableOpacity>
+                            <Text style={styles.link}>Olvidé mi contraseña</Text>
                         </TouchableOpacity>
-                    </View>
-                </ScrollView>
-            </View>
-        </KeyboardAvoidingView>
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: vs(15), alignItems: 'center' }}>
+                            <Text style={styles.registerText}>¿No tienes cuenta? </Text>
+                            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                                <Text style={styles.registerLink}>Regístrate</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
+                </View>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 }

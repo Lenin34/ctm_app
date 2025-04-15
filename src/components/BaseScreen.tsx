@@ -6,7 +6,7 @@ import {
     Platform,
     StyleSheet,
     StyleProp,
-    ViewStyle,
+    ViewStyle, SafeAreaView, StatusBar,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Gradients } from '../constants/theme';
@@ -22,17 +22,21 @@ export default function BaseScreen({ children, scroll = true, style }: Props) {
 
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-            style={{ flex: 1 }}
-        >
-            <View style={styles.wrapper}>
-                <LinearGradient colors={Gradients.greenish} style={StyleSheet.absoluteFillObject} />
-                <Content contentContainerStyle={[styles.contentContainer, style]}>
-                    {children}
-                </Content>
-            </View>
-        </KeyboardAvoidingView>
+
+            <SafeAreaView style={{flex: 1, backgroundColor: '#111921'}} edges={['top']} >
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                    style={{ flex: 1 }}
+                >
+                    <View style={styles.wrapper}>
+                        <LinearGradient colors={Gradients.greenish} style={StyleSheet.absoluteFillObject} />
+                        <Content contentContainerStyle={[styles.contentContainer, style]}>
+                            {children}
+                        </Content>
+                    </View>
+                </KeyboardAvoidingView>
+            </SafeAreaView>
+
     );
 }
 
@@ -41,11 +45,9 @@ const styles = StyleSheet.create({
         flex: 1,
         position: 'relative',
         backgroundColor: '#000',
+
     },
     contentContainer: {
-        flexGrow: 1,
         justifyContent: 'center',
-        paddingHorizontal: 30,
-        paddingVertical: 40,
     },
 });

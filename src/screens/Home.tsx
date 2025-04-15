@@ -4,8 +4,11 @@ import BaseScreen from '../components/BaseScreen';
 import Header from '../components/Header';
 import { homeStyles as styles } from '../styles/homeStyle';
 import * as Animatable from 'react-native-animatable';
+import Carusel from "../components/Carusel";
 
 const posts = [
+    require('../../assets/images/1.jpg'),
+    require('../../assets/images/1.jpg'),
     require('../../assets/images/1.jpg'),
     require('../../assets/images/1.jpg'),
 ];
@@ -69,8 +72,8 @@ export default function Home({ navigation }: any) {
                 <ScrollView contentContainerStyle={styles.scroll}>
                     {/* POSTS */}
                     <Animatable.View animation="fadeInUp" delay={300}>
-                        <Text style={styles.sectionTitle}>ÚLTIMOS POSTS FACEBOOK</Text>
-                        <ScrollView
+                        <Text style={styles.sectionTitle}>LO ÚLTIMO EN REDES SOCIALES</Text>
+{/*                        <ScrollView
                             ref={scrollRef}
                             horizontal
                             showsHorizontalScrollIndicator={false}
@@ -84,7 +87,8 @@ export default function Home({ navigation }: any) {
                                     resizeMode="cover"
                                 />
                             ))}
-                        </ScrollView>
+                        </ScrollView>*/}
+                        <Carusel/>
                     </Animatable.View>
 
                     {/* EVENTO */}

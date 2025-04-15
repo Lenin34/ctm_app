@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import LogoCTM from './LogoCTM';
-
+import {scale, vs, moderateScale, moderateVerticalScale, mvs} from 'react-native-size-matters';
 type Props = {
     onLogout?: () => void;
 };
@@ -19,7 +19,7 @@ export default function Header({ onLogout }: Props) {
         <View style={styles.container}>
             <LogoCTM size="sm" />
             <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-                <Ionicons name="log-out-outline" size={45} color="#fff" />
+                <Ionicons name="log-out-outline" size={mvs(40, 0.5)} color="#fff" />
             </TouchableOpacity>
         </View>
     );
@@ -27,29 +27,15 @@ export default function Header({ onLogout }: Props) {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 50,
-        paddingHorizontal: 20,
+        paddingTop: vs(5),
+        width: '90%',
+        alignSelf: 'center',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        zIndex: 10,
     },
     logoutBtn: {
         flexDirection: 'row',
-        alignItems: 'center',
-        position: 'absolute',
-        top: 20,
-        right: 20,
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 20,
-        paddingTop: 45,
-        zIndex: 10,
     },
-    logoutText: {
-        color: '#fff',
-        marginLeft: 6,
-        fontWeight: 'bold',
-    }
 
 });

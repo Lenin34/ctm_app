@@ -1,24 +1,24 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import { scale, vs, moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 
 const { width } = Dimensions.get('window');
 
 export const homeStyles = StyleSheet.create({
     scroll: {
-        paddingBottom: 80,
-        paddingHorizontal: 15,
+        paddingTop: vs(20)
     },
     sectionTitle: {
-        fontSize: 16,
+        fontSize: vs(12),
         fontWeight: 'bold',
         color: '#fff',
-        marginTop: 30,
-        marginBottom: 15,
+        marginTop: vs(10),
+        textAlign: 'center'
     },
     postImage: {
-        width: width * 0.7,
-        height: 160,
+        width: vs(100),
+        height: vs(100),
         borderRadius: 12,
-        marginRight: 15,
+        marginRight: vs(8),
         backgroundColor: '#fff',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 3 },
@@ -27,8 +27,9 @@ export const homeStyles = StyleSheet.create({
         elevation: 6,
     },
     mainBanner: {
-        width: '100%',
-        height: 220,
+        alignSelf: 'center',
+        width: '90%',
+        height: vs(175),
         borderRadius: 16,
         marginBottom: 20,
         backgroundColor: '#fff',
