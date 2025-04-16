@@ -37,7 +37,9 @@ export const loginStyles = StyleSheet.create({
         borderRadius: vs(30),
         paddingHorizontal: vs(15),
         color: '#000',
-        width: vs(200)
+        width: vs(200),
+        paddingVertical: vs(8),
+
 
     },
     iconOverlay: {

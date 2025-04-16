@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import { homeStyles as styles } from '../styles/homeStyle';
 import * as Animatable from 'react-native-animatable';
 import Carusel from "../components/Carusel";
+import {vs} from "react-native-size-matters";
 
 const posts = [
     require('../../assets/images/1.jpg'),
@@ -22,6 +23,31 @@ const descuentos = [
         image: require('../../assets/images/2.jpg'),
         title: 'Descuento B',
     },
+    {
+        image: require('../../assets/images/2.jpg'),
+        title: 'Descuento B',
+    },
+    {
+        image: require('../../assets/images/2.jpg'),
+        title: 'Descuento B',
+    },
+    {
+        image: require('../../assets/images/1.jpg'),
+        title: 'Descuento A',
+    },
+    {
+        image: require('../../assets/images/2.jpg'),
+        title: 'Descuento B',
+    },
+    {
+        image: require('../../assets/images/2.jpg'),
+        title: 'Descuento B',
+    },
+    {
+        image: require('../../assets/images/2.jpg'),
+        title: 'Descuento B',
+    },
+
 ];
 
 export default function Home({ navigation }: any) {
@@ -93,7 +119,7 @@ export default function Home({ navigation }: any) {
 
                     {/* EVENTO */}
                     <Animatable.View animation="fadeInUp" delay={500}>
-                        <Text style={styles.sectionTitle}>¡LO QUE SE VIENE!</Text>
+                        <Text style={[styles.sectionTitle, {marginBottom: vs(6)}]}>¡LO QUE SE VIENE!</Text>
                         <Animated.Image
                             source={require('../../assets/images/3.jpg')}
                             style={[styles.mainBanner, { transform: [{ scale: scaleAnim }] }]}
@@ -103,22 +129,21 @@ export default function Home({ navigation }: any) {
 
                     {/* DESCUENTOS */}
                     <Animatable.View animation="fadeInUp" delay={700}>
-                        <Text style={styles.sectionTitle}>¡APROVECHA NUESTROS DESCUENTOS AQUÍ!</Text>
-                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                            {descuentos.map((item, index) => (
-                                <View key={index} style={styles.card}>
-                                    <Image
-                                        source={item.image}
-                                        style={styles.cardImage}
-                                        resizeMode="cover"
-                                    />
+                        <Text style={[styles.sectionTitle, { marginBottom: vs(6) }]}>
+                            ¡APROVECHA NUESTROS DESCUENTOS AQUÍ!
+                        </Text>
+                        <View style={styles.gridContainer}>
+                            {descuentos.map((item, idx) => (
+                                <View key={idx} style={styles.gridItem}>
+                                    <Image source={item.image} style={styles.cardImage} resizeMode="cover" />
                                     <View style={styles.cardOverlay}>
                                         <Text style={styles.cardText}>{item.title}</Text>
                                     </View>
                                 </View>
                             ))}
-                        </ScrollView>
+                        </View>
                     </Animatable.View>
+
                 </ScrollView>
             </Animatable.View>
         </BaseScreen>
