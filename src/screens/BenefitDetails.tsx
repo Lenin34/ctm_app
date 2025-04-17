@@ -1,0 +1,144 @@
+import {Animated, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Ionicons} from "@expo/vector-icons";
+import {mvs, vs} from "react-native-size-matters";
+import React, {useEffect, useRef} from "react";
+import BaseScreen from "../components/BaseScreen";
+import Header from "../components/Header";
+import {RouteProp, useNavigation, useRoute} from "@react-navigation/native";
+import {RootStackParamList} from "../navigation/AppNavigator";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import * as Animatable from "react-native-animatable";
+
+export default function BenefitDetails() {
+    const route = useRoute<RouteProp<RootStackParamList, 'BenefitDetails'>>();
+    const {descuento} = route.params;
+    if(!descuento) return null;
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'Home'>>();
+    const scrollRef = useRef<ScrollView>(null);
+    const scaleAnim = useRef(new Animated.Value(1)).current;
+
+
+    useEffect(() => {
+        // auto-scroll posts
+        let scrollX = 0;
+        const scrollInterval = setInterval(() => {
+            scrollX += 300;
+            scrollRef.current?.scrollTo({ x: scrollX, animated: true });
+        }, 4000);
+
+        return () => clearInterval(scrollInterval);
+    }, []);
+
+    useEffect(() => {
+        // scale animation for banner
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(scaleAnim, {
+                    toValue: 1.03,
+                    duration: 2000,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(scaleAnim, {
+                    toValue: 1,
+                    duration: 2000,
+                    useNativeDriver: true,
+                }),
+            ])
+        ).start();
+    }, []);
+
+    return(
+        <BaseScreen>
+            <Header/>
+            <Animatable.View animation="fadeInUp" duration={800} delay={200} style={styles.container}>
+                <View style={styles.img}>
+                    <Text>{descuento.image}</Text>
+                </View>
+                <View>
+                    <Text style={styles.title}>{descuento.titulo}</Text>
+                    <Text style={styles.vigencia}> Vigencia hasta {descuento.vigencia}</Text>
+                </View>
+                <ScrollView style={styles.condicionesContainer}>
+                    <Text style={styles.condicionesHeader}>Condiciones</Text>
+                    <Text style={styles.condicionesBody}>{descuento.condiciones}</Text>
+                </ScrollView>
+                <View>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
+                        <Ionicons name="reload" size={mvs(25, 0.5)} color="#fff" />
+                        <Text style={styles.buttonText}>Regresar</Text>
+                    </TouchableOpacity>
+                </View>
+            </Animatable.View>
+        </BaseScreen>
+
+    )
+}
+
+
+const styles = StyleSheet.create({
+        container: {
+            backgroundColor: 'rgba(209,209,209,0.5)',
+            paddingHorizontal: vs(30),
+            paddingVertical: vs(14),
+            width: '80%',
+            marginHorizontal: 'auto',
+            marginTop: vs(100),
+            borderRadius: 20,
+            alignItems: "center",
+            paddingTop: vs(100),
+            justifyContent: "space-evenly",
+        },
+        img: {
+            width: vs(130),
+            height: vs(130),
+            backgroundColor: 'green',
+            position: 'absolute',
+            zIndex: 2,
+            top: -vs(40),
+            borderRadius: 10,
+            elevation: 8,
+            shadowColor: '#000',
+            shadowOpacity: 0.2,
+            shadowOffset: {width: 2, height: 2},
+        },
+        title: {
+            fontSize: vs(18),
+            fontWeight: "bold",
+            color: 'white',
+            textAlign: "center"
+        },
+        vigencia: {
+            fontSize: vs(10),
+            color: 'white',
+            marginTop: vs(3),
+            marginBottom: vs(15),
+        },
+        condicionesContainer: {
+            width: '100%',
+            maxHeight: vs(100),
+            backgroundColor: '#FFF',
+            borderRadius: 20,
+            padding: vs(15),
+            marginBottom: vs(15)
+        },
+        condicionesHeader: {
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: vs(12),
+            marginBottom: vs(5),
+        },
+        condicionesBody: {
+            fontSize: vs(10),
+            textAlign: "justify"
+        },
+        button: {
+            flexDirection: "row"
+        },
+        buttonText: {
+            fontSize: vs(14),
+            paddingLeft: vs(5),
+            color: '#FFF'
+        }
+
+    },
+);

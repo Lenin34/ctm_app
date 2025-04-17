@@ -4,9 +4,7 @@ import { scale, vs, moderateScale, moderateVerticalScale } from 'react-native-si
 const { width } = Dimensions.get('window');
 const imgGrid = (Dimensions.get('window').width * 0.8) / 3;
 export const homeStyles = StyleSheet.create({
-    scroll: {
-        paddingTop: vs(20)
-    },
+
     sectionTitle: {
         fontSize: vs(12),
         fontWeight: 'bold',
@@ -46,7 +44,7 @@ export const homeStyles = StyleSheet.create({
     cardImage: {
         width: imgGrid,
         height: imgGrid,
-        borderRadius: 16,
+        borderRadius: 10,
         backgroundColor: '#fff',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -77,6 +75,7 @@ export const homeStyles = StyleSheet.create({
     },
     colapsableContainer: {
         width: '100%',
-        backgroundColor: 'white'
+        backgroundColor: 'rgba(209,209,209,0.5)',
+        paddingHorizontal: vs(8)
     }
 });

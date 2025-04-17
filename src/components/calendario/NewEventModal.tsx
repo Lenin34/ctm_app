@@ -1,33 +1,37 @@
-import {Modal, TouchableWithoutFeedback, View, StyleSheet, Text} from "react-native";
+import {Modal, TouchableWithoutFeedback, View, StyleSheet, Text, TouchableOpacity} from "react-native";
 import {mvs, vs} from "react-native-size-matters";
 import { BlurView } from "expo-blur";
 import {X, ChevronDown} from "lucide-react-native";
 
 
-interface Props {
+type Props = {
     visible: boolean;
     setVisible: (v: boolean) => void;
+    eventos: number;
 }
-export default function NewEventModal({visible, setVisible}: Props) {
+export default function NewEventModal({visible, setVisible, eventos}: Props) {
+
     return (
         <Modal visible={visible} transparent animationType="fade">
-            <TouchableWithoutFeedback style={{flex: 1}} onPress={() => setVisible(false)}>
                 <BlurView intensity={60} tint="dark" style={{flex: 1}}>
                     <View style={styles.container}>
                         <View style={styles.rowTitle}>
                             <Text style={styles.textTitle}>¡ALERTA!</Text>
-                            <X color="white" size={mvs(20,0.75)} style={styles.close} strokeWidth={3}/>
+                            <TouchableOpacity style={styles.close} onPress={() => setVisible(false)}>
+                                <X color="white" size={mvs(20,0.75)}  strokeWidth={3}/>
+                            </TouchableOpacity>
                         </View>
                         <View style={{marginVertical: vs(6)}}>
-                            <Text style={styles.textTitle}>TIENES {} EVENTOS PRÓXIMOS</Text>
+                            <Text style={styles.textTitle}>TIENES {eventos} EVENTOS PRÓXIMOS</Text>
                         </View>
-                        <View style={styles.row}>
-                            <Text style={styles.textLink}>Ver eventos</Text>
-                            <ChevronDown color="white" size={mvs(20,0.75)} strokeWidth={3}/>
+                        <View >
+                            <TouchableOpacity style={styles.row} onPress={() => setVisible(false)}>
+                                <Text style={styles.textLink}>Ver eventos</Text>
+                                <ChevronDown color="white" size={mvs(20,0.75)} strokeWidth={3}/>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </BlurView>
-            </TouchableWithoutFeedback>
         </Modal>
     );
 }
@@ -37,7 +41,7 @@ const styles = StyleSheet.create({
             backgroundColor: '#E52D1D',
             paddingHorizontal: vs(16),
             paddingVertical: vs(14),
-            width: '70%',
+            width: '80%',
             marginHorizontal: 'auto',
             marginTop: vs(140),
             borderRadius: 20
@@ -45,7 +49,7 @@ const styles = StyleSheet.create({
         textTitle: {
             color: 'white',
             fontWeight: '900',
-            fontSize: vs(16),
+            fontSize: vs(18),
             textAlign: 'center',
             fontFamily: 'Monserrat'
         },
@@ -70,6 +74,9 @@ const styles = StyleSheet.create({
         row: {
             flexDirection: 'row',
             justifyContent: 'center',
-            alignContent: 'end'}
+            alignItems: 'center',
+            width: '100%',
+            alignSelf: "center"
+        }
     },
 );

@@ -4,19 +4,29 @@ import BaseScreen from "../components/BaseScreen";
 import Header from "../components/Header";
 import * as Animatable from "react-native-animatable";
 import {homeStyles as styles} from "../styles/homeStyle";
-import Carusel from "../components/Carusel";
-import {vs} from "react-native-size-matters";
 import NewEventModal from "../components/calendario/NewEventModal";
 import CalendarComponent from "../components/calendario/CalendarComponent";
 import EventList from "../components/calendario/EventList";
 import EventRow from "../components/calendario/EventRow";
+import {generateMarkedDates} from "../hooks/markedDates";
+import TodayEvent from "../components/calendario/TodayEvent";
+import findEvents from "../hooks/findEvents";
 
-
+interface Evento {
+    idEvento: string;
+    date: string;
+    details: string;
+}
 
 export default function Calendar({navigation}) {
     const scrollRef = useRef<ScrollView>(null);
     const scaleAnim = useRef(new Animated.Value(1)).current;
     const [modalSuccessVisible, setModalSuccessVisible] = useState(false);
+    const [calendarDaySelected, setCalendarDaySelected] = useState<string>(new Date().toISOString().split('T')[0]);
+    const [numeroEventos, setNumeroeventos] = useState(0)
+
+
+
 
     const handleLogout = () => {
         navigation.reset({
@@ -25,16 +35,39 @@ export default function Calendar({navigation}) {
         });
     };
 
-/*    const markedDates = {
-        '2025-04-05': { selected: true, selectedColor: '#70d7c7' },
-        '2025-04-10': { marked: true, dotColor: 'red' },
-        '2025-04-15': { disabled: true, disableTouchEvent: true },
-    };*/
+    const eventosApi = [
+        { idEvento: '1', date:'2025-04-16', details: 'duplicado 1' },
+        { idEvento: '2', date:'2025-04-06', details: 'duplicado 2' },
+        { idEvento: '3', date:'2025-05-09', details: '9 de mayo' },
+        { idEvento: '4', date:'2025-04-11', details: '11 de abril' },
+        { idEvento: '5', date:'2026-04-13', details: '13 de abril 2026' },
+        { idEvento: '6', date:'2025-9-18', details: '18 de octubre' },
+        { idEvento: '7', date:'2025-12-18', details: '18 de diciembre' },
+    ];
 
-    const markedDates = [
-        { idEvento: '1', date:'2025-04-06', details: 'Navidad' },
-        { idEvento: '2', date:'2025-04-07', details: 'Navidad' },
-    ]
+    const [calendarDaySelectedJson, setCalendarDaySelectedJson]= useState<Evento[]>(findEvents({
+        date: calendarDaySelected,
+        apiEvents: eventosApi,
+    }))
+
+
+    const markedDates = generateMarkedDates(eventosApi);
+
+    useEffect(() => {
+        setNumeroeventos(eventosApi.length)
+        setModalSuccessVisible(true)
+    }, []);
+
+    useEffect(() => {
+        const calendarDaySelectedJson: Evento[] = findEvents({
+            date: calendarDaySelected,
+            apiEvents: eventosApi,
+        });
+        setCalendarDaySelectedJson(calendarDaySelectedJson)
+        console.log('dia atrapado',calendarDaySelected)
+        console.log('dia desde screen calendar', calendarDaySelectedJson)
+    }, [calendarDaySelected]);
+
 
     useEffect(() => {
         // auto-scroll posts
@@ -65,29 +98,28 @@ export default function Calendar({navigation}) {
         ).start();
     }, []);
 
+
+
     return (
         <BaseScreen>
             <Header onLogout={handleLogout} />
 
             <Animatable.View animation="fadeInUp" duration={800} delay={200}>
-                <ScrollView contentContainerStyle={styles.scroll}>
+                <View>
 
-                    <CalendarComponent markedDates={markedDates}/>
-                    <TouchableOpacity onPress={() => setModalSuccessVisible(true)}
-                                      style={{backgroundColor:'red'}}
-                    >
-                        <Text>Alerta</Text>
-                    </TouchableOpacity>
-                    <EventList title={"Eventos"}>
+                    <CalendarComponent markedDates={markedDates} setCalendarDaySelected={setCalendarDaySelected}/>
+
+                    <TodayEvent eventos={calendarDaySelectedJson}/>
+
+                    <EventList numeroEventos={numeroEventos}>
                         <View style={styles.colapsableContainer}>
-                            <EventRow items={markedDates}/>
+                            <EventRow items={eventosApi}/>
                         </View>
                     </EventList>
 
+                    <NewEventModal visible={modalSuccessVisible} setVisible={setModalSuccessVisible} eventos={numeroEventos}/>
 
-                    <NewEventModal visible={modalSuccessVisible} setVisible={setModalSuccessVisible}/>
-
-                </ScrollView>
+                </View>
             </Animatable.View>
         </BaseScreen>
     );

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef, useMemo, useEffect} from 'react';
 import {
     View,
     Text,
@@ -8,54 +8,97 @@ import {
 } from 'react-native';
 import { ChevronDown, X } from 'lucide-react-native';
 import { mvs, vs } from 'react-native-size-matters';
+import {AnimatedView} from "react-native-reanimated/lib/typescript/component/View";
 
-const EventList = ({ title, children }) => {
+
+
+const EventList = ({ children, numeroEventos}) => {
+
     const [collapsed, setCollapsed] = useState(true);
     const animation = useRef(new Animated.Value(0)).current;
+    const radiusAnim     = useRef(new Animated.Value(20)).current;
+    const [contentHeight, setContentHeight] = useState(0);
+    const label = collapsed ? 'Ver eventos' : 'Ocultar eventos'
 
     const toggleCollapse = () => {
-        Animated.timing(animation, {
-            toValue: collapsed ? 1 : 0,
-            duration: 300,
-            useNativeDriver: false, // height no funciona con native driver
-        }).start(() => {
-            setCollapsed(!collapsed);
-        });
+        if (collapsed) {
+            /* 1️⃣  ABRIR:  altura 0 ➜ 1  y luego radio 20 ➜ 0  */
+            Animated.sequence([
+                Animated.timing(animation, {
+                    toValue: 1,           // expande
+                    duration: 300,
+                    useNativeDriver: false,
+                }),
+                Animated.timing(radiusAnim, {
+                    toValue: 0,           // quita redondeo DESPUÉS
+                    duration: 200,
+                    useNativeDriver: false,
+                }),
+            ]).start(() => setCollapsed(false));
+        } else {
+            /* 2️⃣  CERRAR:  altura 1 ➜ 0  y luego radio 0 ➜ 20  */
+            Animated.sequence([
+                Animated.timing(animation, {
+                    toValue: 0,           // colapsa
+                    duration: 300,
+                    useNativeDriver: false,
+                }),
+                Animated.timing(radiusAnim, {
+                    toValue: 20,          // vuelve a redondear DESPUÉS
+                    duration: 200,
+                    useNativeDriver: false,
+                }),
+            ]).start(() => setCollapsed(true));
+        }
     };
 
-    const heightInterpolate = animation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, 100], // puedes ajustar esto según tu contenido
-    });
+    const heightInterpolate = useMemo(
+        () => animation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, contentHeight || 1], // evita [0,0] la 1ª vez
+        }),
+        [animation, contentHeight]            // ← dependencia clave
+    );
 
     const animatedStyle = {
         height: heightInterpolate,
-        width: '70%',
+        width: '90%',
         overflow: 'hidden',
         borderBottomLeftRadius: 20,
-        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
     };
 
     return (
         <View style={styles.wrapper}>
-            <View style={styles.container}>
+            <Animated.View style={[styles.container, {
+                borderBottomLeftRadius:  radiusAnim,
+                borderBottomRightRadius: radiusAnim,
+            },]}>
                 <View style={styles.rowTitle}>
-                    <TouchableOpacity style={styles.close} onPress={toggleCollapse}>
+                    <TouchableOpacity  style={[styles.close, {opacity: collapsed ? 0 : 1 }]} onPress={toggleCollapse}>
                         <X
                             color="white"
                             size={mvs(20, 0.75)}
                             strokeWidth={3}
                         />
                     </TouchableOpacity>
-                    <Text style={styles.textTitle}>TIENES 3 EVENTOS PRÓXIMOS</Text>
+                    <View style={{width: '70%'}}>
+                        <Text style={styles.textTitle}>TIENES {numeroEventos} EVENTOS PRÓXIMOS</Text>
+                    </View>
                 </View>
                 <TouchableOpacity onPress={toggleCollapse}  style={styles.row}>
-                    <Text style={styles.textLink}>Ver eventos</Text>
+                    <Text style={styles.textLink}>{label}</Text>
                     <ChevronDown color="white" size={mvs(20, 0.75)} strokeWidth={3} />
                 </TouchableOpacity>
-            </View>
-            <Animated.View style={animatedStyle}>
-                <View>{children}</View>
+            </Animated.View>
+            <Animated.View style = {animatedStyle}>
+                <View
+                    onLayout={(e) => {
+                        const h = e.nativeEvent.layout.height;
+                        if (h !== contentHeight) setContentHeight(h);
+                    }}
+                >
+                    {children}</View>
             </Animated.View>
         </View>
     );
@@ -66,22 +109,21 @@ export default EventList;
 const styles = StyleSheet.create({
     wrapper: {
         alignItems: 'center',
-        marginVertical: vs(10),
+        marginBottom: vs(30)
     },
     container: {
         backgroundColor: '#E52D1D',
         paddingHorizontal: vs(16),
         paddingVertical: vs(14),
-        width: '70%',
+        width: '90%',
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
     },
     textTitle: {
         color: 'white',
         fontWeight: '900',
-        fontSize: vs(16),
+        fontSize: vs(18),
         textAlign: 'center',
-        fontFamily: 'Montserrat',
     },
     textLink: {
         color: 'white',
