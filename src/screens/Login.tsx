@@ -7,7 +7,7 @@ import {
     KeyboardAvoidingView,
     Platform,
     View,
-    StyleSheet, SafeAreaView,
+    StyleSheet, SafeAreaView, Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,7 +16,10 @@ import { loginStyles as styles } from '../styles/loginStyles';
 import { Gradients } from '../constants/theme';
 import { useValidation, ValidationErrors } from '../hooks/useValidation';
 import LogoCTM from '../components/LogoCTM';
+import FondoAzul from "../components/fondoAzul";
 import { vs} from 'react-native-size-matters';
+import LogoSN from "../components/LogoSN";
+import AvisoPrivacidad from "./AvisoPrivacidad";
 
 export default function Login({ navigation }: any) {
     const [email, setEmail] = useState('');
@@ -24,6 +27,7 @@ export default function Login({ navigation }: any) {
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState<ValidationErrors>({});
     const { validateLogin } = useValidation();
+    const { width, height } = Dimensions.get('window');
 
     const handleLogin = () => {
         const validationErrors = validateLogin({ email, password });
@@ -39,21 +43,25 @@ export default function Login({ navigation }: any) {
     };
 
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: '#111921'}} edges={['top']}>
+        <SafeAreaView style={{flex: 1, backgroundColor: '#0B3F61'}} edges={['top']}>
+
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             >
                 <View style={styles.wrapper}>
                     <LinearGradient
-                        colors={Gradients.greenish}
+                        colors={Gradients.blue}
                         style={StyleSheet.absoluteFillObject}
                     />
+                    <View style={{position: 'absolute', bottom: 0}}>
+                        <FondoAzul width={width}/>
+                    </View>
                     <ScrollView
                         contentContainerStyle={styles.scrollContainer}
                         keyboardShouldPersistTaps="handled"
                     >
-                        <LogoCTM />
+                        <LogoSN size="md"/>
 
                         <Text style={styles.title}>LOGIN</Text>
 
@@ -113,7 +121,12 @@ export default function Login({ navigation }: any) {
                                 <Text style={styles.registerLink}>Regístrate</Text>
                             </TouchableOpacity>
                         </View>
+
+
                     </ScrollView>
+                    <TouchableOpacity style={{marginBottom: vs(30)}} onPress={() => navigation.navigate('AvisoPrivacidad')}>
+                        <Text style={styles.link}>Aviso de privacidad</Text>
+                    </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
         </SafeAreaView>

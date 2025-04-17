@@ -4,26 +4,26 @@
     "slug": "ctm_app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/logo_ctm.png",
+    "icon": "./assets/images/SINDICATO_NACIONAL.png",
 
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/logo_ctm.png",
+      "image": "./assets/images/SINDICATO_NACIONAL.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0B3F61"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/logo_ctm.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/SINDICATO_NACIONAL.png",
+        "backgroundColor": "#0B3F61"
       }
     },
     "web": {
-      "favicon": "./assets/images/logo_ctm.png"
+      "favicon": "./assets/images/SINDICATO_NACIONAL.png"
     }
   }
 }

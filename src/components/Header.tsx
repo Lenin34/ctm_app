@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import LogoCTM from './LogoCTM';
+import LogoSN from "./LogoSN";
 import {scale, vs, moderateScale, moderateVerticalScale, mvs} from 'react-native-size-matters';
 type Props = {
     onLogout?: () => void;
@@ -17,9 +18,9 @@ export default function Header({ onLogout }: Props) {
 
     return (
         <View style={styles.container}>
-            <LogoCTM size="sm" />
+            <LogoSN size="sm" />
             <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-                <Ionicons name="log-out-outline" size={mvs(40, 0.5)} color="#fff" />
+                <Ionicons name="log-out-outline" size={mvs(35, 0.5)} color="#fff" />
             </TouchableOpacity>
         </View>
     );
