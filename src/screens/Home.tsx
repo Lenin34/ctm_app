@@ -7,7 +7,6 @@ import * as Animatable from 'react-native-animatable';
 import Carusel from "../components/Carusel";
 import {vs} from "react-native-size-matters";
 import Descuentos from "../components/benefits/Descuentos";
-import DescuentoModal from "../components/benefits/DescuentoModal";
 
 const posts = [
     require('../../assets/images/1.jpg'),

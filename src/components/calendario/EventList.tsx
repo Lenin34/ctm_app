@@ -1,149 +1,205 @@
-import React, {useState, useRef, useMemo, useEffect} from 'react';
+// EventList.tsx (Componente Acordeón)
+import React from 'react';
 import {
     View,
     Text,
-    TouchableWithoutFeedback,
-    Animated,
-    StyleSheet, TouchableOpacity,
+    TouchableOpacity,
+    StyleSheet,
 } from 'react-native';
-import { ChevronDown, X } from 'lucide-react-native';
+import { X } from 'lucide-react-native';
 import { mvs, vs } from 'react-native-size-matters';
-import {AnimatedView} from "react-native-reanimated/lib/typescript/component/View";
+import Animated, {
+    measure,
+    runOnUI,
+    useAnimatedRef,
+    useAnimatedStyle,
+    useDerivedValue,
+    useSharedValue,
+    withTiming,
+    interpolate,
+    Extrapolation
+} from 'react-native-reanimated';
+import { LocaleConfig } from 'react-native-calendars';
+import RotableChevronDown from './RotableChevronDown';
 
+interface Evento {
+    idEvento: string;
+    date: string;
+    details: string;
+}
 
+type Props = {
+    numeroEventos: number;
+    eventos: Evento[];
+};
 
-const EventList = ({ children, numeroEventos}) => {
+const EventList = ({ numeroEventos, eventos }: Props) => {
+    const locale = LocaleConfig.locales[LocaleConfig.defaultLocale];
 
-    const [collapsed, setCollapsed] = useState(true);
-    const animation = useRef(new Animated.Value(0)).current;
-    const radiusAnim     = useRef(new Animated.Value(20)).current;
-    const [contentHeight, setContentHeight] = useState(0);
-    const label = collapsed ? 'Ver eventos' : 'Ocultar eventos'
-
-    const toggleCollapse = () => {
-        if (collapsed) {
-            /* 1️⃣  ABRIR:  altura 0 ➜ 1  y luego radio 20 ➜ 0  */
-            Animated.sequence([
-                Animated.timing(animation, {
-                    toValue: 1,           // expande
-                    duration: 300,
-                    useNativeDriver: false,
-                }),
-                Animated.timing(radiusAnim, {
-                    toValue: 0,           // quita redondeo DESPUÉS
-                    duration: 200,
-                    useNativeDriver: false,
-                }),
-            ]).start(() => setCollapsed(false));
-        } else {
-            /* 2️⃣  CERRAR:  altura 1 ➜ 0  y luego radio 0 ➜ 20  */
-            Animated.sequence([
-                Animated.timing(animation, {
-                    toValue: 0,           // colapsa
-                    duration: 300,
-                    useNativeDriver: false,
-                }),
-                Animated.timing(radiusAnim, {
-                    toValue: 20,          // vuelve a redondear DESPUÉS
-                    duration: 200,
-                    useNativeDriver: false,
-                }),
-            ]).start(() => setCollapsed(true));
-        }
-    };
-
-    const heightInterpolate = useMemo(
-        () => animation.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, contentHeight || 1], // evita [0,0] la 1ª vez
-        }),
-        [animation, contentHeight]            // ← dependencia clave
+    const listRef = useAnimatedRef<Animated.View>();
+    const open = useSharedValue(false);
+    const heightValue = useSharedValue(0);
+    const progress = useDerivedValue(() =>
+        open.value ? withTiming(1, { duration: 300 }) : withTiming(0, { duration: 200 })
     );
 
-    const animatedStyle = {
-        height: heightInterpolate,
-        width: '90%',
+    const heightAnimationStyle = useAnimatedStyle(() => ({
+        height: interpolate(
+            progress.value,
+            [0, 1],
+            [0, heightValue.value],
+            Extrapolation.CLAMP
+        ),
         overflow: 'hidden',
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
+    }));
+
+    const handleToggle = () => {
+        runOnUI(() => {
+            'worklet';
+            const measured = measure(listRef);
+            if (measured) {
+                if (heightValue.value === 0) {
+                    heightValue.value = measured.height;
+                }
+                open.value = !open.value;
+            }
+        })();
+    };
+
+    const convertirFecha = (fecha: string): string => {
+        const [anio, mes, dia] = fecha.split('-');
+        const nombreMes = locale.monthNames[Number(mes) - 1];
+        return `${dia} DE ${nombreMes} DE ${anio}`;
     };
 
     return (
-        <View style={styles.wrapper}>
-            <Animated.View style={[styles.container, {
-                borderBottomLeftRadius:  radiusAnim,
-                borderBottomRightRadius: radiusAnim,
-            },]}>
-                <View style={styles.rowTitle}>
-                    <TouchableOpacity  style={[styles.close, {opacity: collapsed ? 0 : 1 }]} onPress={toggleCollapse}>
-                        <X
-                            color="white"
-                            size={mvs(20, 0.75)}
-                            strokeWidth={3}
-                        />
+        <Animated.View style={styles.container}>
+            <View style={styles.header}>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>
+                        TIENES {numeroEventos} EVENTOS PRÓXIMOS
+                    </Text>
+                    <TouchableOpacity onPress={handleToggle} style={styles.closeButton}>
+                        <X color="white" size={mvs(20)} strokeWidth={3} />
                     </TouchableOpacity>
-                    <View style={{width: '70%'}}>
-                        <Text style={styles.textTitle}>TIENES {numeroEventos} EVENTOS PRÓXIMOS</Text>
-                    </View>
                 </View>
-                <TouchableOpacity onPress={toggleCollapse}  style={styles.row}>
-                    <Text style={styles.textLink}>{label}</Text>
-                    <ChevronDown color="white" size={mvs(20, 0.75)} strokeWidth={3} />
+
+                <TouchableOpacity onPress={handleToggle} style={styles.toggleButton}>
+                    <Text style={styles.toggleText}>Ver eventos</Text>
+                    <RotableChevronDown progress={progress} />
                 </TouchableOpacity>
-            </Animated.View>
-            <Animated.View style = {animatedStyle}>
-                <View
-                    onLayout={(e) => {
-                        const h = e.nativeEvent.layout.height;
-                        if (h !== contentHeight) setContentHeight(h);
+            </View>
+
+            <Animated.View style={heightAnimationStyle}>
+                <Animated.View
+                    ref={listRef}
+                    style={styles.content}
+                    onLayout={() => {
+                        runOnUI(() => {
+                            'worklet';
+                            const measured = measure(listRef);
+                            if (measured && heightValue.value === 0) {
+                                heightValue.value = measured.height;
+                            }
+                        })();
                     }}
                 >
-                    {children}</View>
+                    {eventos.map((evento) => (
+                        <View key={evento.idEvento} style={styles.eventItem}>
+                            <Text style={styles.eventDetails}>{evento.details}</Text>
+                            <View style={styles.dateContainer}>
+                                <View style={styles.eventDot} />
+                                <Text style={styles.eventDate}>
+                                    {convertirFecha(evento.date)}
+                                </Text>
+                            </View>
+                            <View style={styles.separator} />
+                        </View>
+                    ))}
+                </Animated.View>
             </Animated.View>
-        </View>
+        </Animated.View>
     );
 };
 
-export default EventList;
-
 const styles = StyleSheet.create({
-    wrapper: {
-        alignItems: 'center',
-        marginBottom: vs(30)
-    },
     container: {
-        backgroundColor: '#E52D1D',
-        paddingHorizontal: vs(16),
-        paddingVertical: vs(14),
-        width: '90%',
-        borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
+        backgroundColor: 'rgba(209,209,209,0.5)',
+        borderRadius: 16,
+        margin: 16,
+        overflow: 'hidden',
     },
-    textTitle: {
-        color: 'white',
-        fontWeight: '900',
-        fontSize: vs(18),
-        textAlign: 'center',
+    header: {
+        padding: 16,
+        backgroundColor: '#E52D1D'
     },
-    textLink: {
-        color: 'white',
-        fontWeight: '900',
-        fontSize: vs(14),
-        textAlign: 'center',
-        textDecorationLine: 'underline',
-        fontFamily: 'Montserrat',
-    },
-    close: {
-        position: 'absolute',
-        right: 0,
-    },
-    rowTitle: {
+    titleContainer: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 8,
     },
-    row: {
+    title: {
+        color: 'white',
+        fontSize: vs(16),
+        fontWeight: 'bold',
+        flex: 1,
+        textAlign: 'center',
+    },
+    closeButton: {
+        marginLeft: 8,
+    },
+    toggleButton: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: 8,
+    },
+    toggleText: {
+        color: 'white',
+        fontSize: vs(14),
+        fontWeight: 'bold',
+        marginRight: 8,
+        textDecorationLine: 'underline',
+    },
+    content: {
+        position: 'absolute',
+        width: '100%',
+
+    },
+    eventItem: {
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    },
+    eventDetails: {
+        color: 'white',
+        fontSize: vs(14),
+        fontWeight: '600',
+        textTransform: 'uppercase',
+    },
+    dateContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 8,
+    },
+    eventDot: {
+        width: vs(12),
+        height: vs(12),
+        borderRadius: vs(6),
+        backgroundColor: '#292468',
+        marginRight: 8,
+    },
+    eventDate: {
+        color: 'white',
+        fontSize: vs(14),
+        fontWeight: '500',
+    },
+    separator: {
+        height: 1,
+        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+        marginTop: 12,
     },
 });
+
+export default EventList;

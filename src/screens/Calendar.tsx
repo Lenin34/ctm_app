@@ -111,11 +111,7 @@ export default function Calendar({navigation}) {
 
                     <TodayEvent eventos={calendarDaySelectedJson}/>
 
-                    <EventList numeroEventos={numeroEventos}>
-                        <View style={styles.colapsableContainer}>
-                            <EventRow items={eventosApi}/>
-                        </View>
-                    </EventList>
+                    <EventList numeroEventos={numeroEventos} eventos={eventosApi}/>
 
                     <NewEventModal visible={modalSuccessVisible} setVisible={setModalSuccessVisible} eventos={numeroEventos}/>
 
