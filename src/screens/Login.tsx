@@ -15,10 +15,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { loginStyles as styles } from '../styles/loginStyles';
 import { Gradients } from '../constants/theme';
 import { useValidation, ValidationErrors } from '../hooks/useValidation';
-import LogoCTM from '../components/LogoCTM';
-import FondoAzul from "../components/fondoAzul";
-import { vs} from 'react-native-size-matters';
-import LogoSN from "../components/LogoSN";
+import LogoCTM from '../components/svg/LogoCTM';
+import FondoAzul from "../components/svg/fondoAzul";
+import {mvs, vs} from 'react-native-size-matters';
+import LogoSN from "../components/svg/LogoSN";
 import AvisoPrivacidad from "./AvisoPrivacidad";
 
 export default function Login({ navigation }: any) {
@@ -45,18 +45,23 @@ export default function Login({ navigation }: any) {
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: '#0B3F61'}} edges={['top']}>
 
+            <View style={StyleSheet.absoluteFill}>
+                <LinearGradient
+                    colors={Gradients.blue}
+                    style={StyleSheet.absoluteFillObject}
+                />
+                <View style={{ position: 'absolute', bottom: 0 }}>
+                    <FondoAzul width={width} />
+                </View>
+            </View>
+
+
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+
             >
                 <View style={styles.wrapper}>
-                    <LinearGradient
-                        colors={Gradients.blue}
-                        style={StyleSheet.absoluteFillObject}
-                    />
-                    <View style={{position: 'absolute', bottom: 0}}>
-                        <FondoAzul width={width}/>
-                    </View>
                     <ScrollView
                         contentContainerStyle={styles.scrollContainer}
                         keyboardShouldPersistTaps="handled"
@@ -122,11 +127,12 @@ export default function Login({ navigation }: any) {
                             </TouchableOpacity>
                         </View>
 
-
+                        <View style={{alignSelf: 'center', bottom: 0, position: 'absolute', marginBottom: mvs(30)}}>
+                            <TouchableOpacity onPress={() => navigation.navigate('AvisoPrivacidad')}>
+                                <Text style={styles.link}>Aviso de privacidad</Text>
+                            </TouchableOpacity>
+                        </View>
                     </ScrollView>
-                    <TouchableOpacity style={{marginBottom: vs(30)}} onPress={() => navigation.navigate('AvisoPrivacidad')}>
-                        <Text style={styles.link}>Aviso de privacidad</Text>
-                    </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
         </SafeAreaView>

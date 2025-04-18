@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleProp, ImageStyle, StyleSheet, Dimensions } from 'react-native';
 // @ts-ignore
-import logoCTM from '../../assets/images/logo_ctm.png';
+import logoCTM from '../../../assets/images/logo_ctm.png';
 import { vs, mvs } from 'react-native-size-matters';
 const { width } = Dimensions.get('window');
 

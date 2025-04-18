@@ -14,7 +14,6 @@ export const loginStyles = StyleSheet.create({
     wrapper: {
         flex: 1,
         position: 'relative',
-        backgroundColor: '#0B3F61', // fondo por si fallara el gradiente
     },
     title: {
         color: '#ffffff',

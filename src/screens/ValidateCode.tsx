@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import {Text, TextInput, TouchableOpacity, Alert, View} from 'react-native';
 import BaseScreen from '../components/BaseScreen';
 import { validateStyles as styles } from '../styles/validateStyles';
-import LogoCTM from '../components/LogoCTM';
-import LogoSN from "../components/LogoSN";
+import LogoCTM from '../components/svg/LogoCTM';
+import LogoSN from "../components/svg/LogoSN";
 import {Ionicons} from "@expo/vector-icons";
 import {vs} from "react-native-size-matters";
 

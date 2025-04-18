@@ -5,7 +5,7 @@ import { successStyles as styles } from '../styles/successStyles';
 import * as Animatable from 'react-native-animatable';
 // @ts-ignore
 import logoCTM from '../../assets/images/logo_ctm.png';
-import LogoCTM from "../components/LogoCTM";
+import LogoCTM from "../components/svg/LogoCTM";
 
 export default function Success({ navigation }: any) {
     return (

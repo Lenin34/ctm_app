@@ -3,12 +3,12 @@ import {View, Text, TextInput, Image, TouchableOpacity} from 'react-native';
 import BaseScreen from '../components/BaseScreen';
 import {registerStyles as styles} from '../styles/registerStyles';
 import {useValidation, ValidationErrors} from '../hooks/useValidation';
-import LogoSN from "../components/LogoSN";
+import LogoSN from "../components/svg/LogoSN";
 // @ts-ignore
 import logoCTM from '../../assets/images/logo_ctm.png';
 import CompanySelector from '../components/CompanySelector';
-import LogoCTM from "../components/LogoCTM";
-import {vs} from "react-native-size-matters";
+import LogoCTM from "../components/svg/LogoCTM";
+import {mvs, vs} from "react-native-size-matters";
 
 export default function Register({navigation}: any) {
     const [form, setForm] = useState({
@@ -131,9 +131,11 @@ export default function Register({navigation}: any) {
                     <Text style={styles.registerText}>SIGUIENTE ➝</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity>
-                    <Text style={styles.link}>AVISO DE PRIVACIDAD</Text>
-                </TouchableOpacity>
+                <View style={{alignSelf: 'center', marginBottom: mvs(30)}}>
+                    <TouchableOpacity onPress={() => navigation.navigate('AvisoPrivacidad')}>
+                        <Text style={styles.link}>Aviso de privacidad</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </BaseScreen>
     );

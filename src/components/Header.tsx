@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import LogoCTM from './LogoCTM';
-import LogoSN from "./LogoSN";
+import LogoCTM from './svg/LogoCTM';
+import LogoSN from "./svg/LogoSN";
 import {scale, vs, moderateScale, moderateVerticalScale, mvs} from 'react-native-size-matters';
 type Props = {
     onLogout?: () => void;

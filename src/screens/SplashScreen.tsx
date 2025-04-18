@@ -6,7 +6,7 @@ import { splashStyles as styles } from '../styles/splashStyles';
 // @ts-ignore
 import splashIcon from '../../assets/images/logo_ctm.png';
 import { Gradients } from '../constants/theme';
-import LogoSN from "../components/LogoSN";
+import LogoSN from "../components/svg/LogoSN";
 
 export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
     useEffect(() => {
