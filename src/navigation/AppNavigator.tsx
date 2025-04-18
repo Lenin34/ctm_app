@@ -8,9 +8,14 @@ import Register from '../screens/Register';
 import Validate from '../screens/ValidateCode';
 import Success from '../screens/Success';
 import BottomTabs from './BottomTabs';
+import BenefitDetails from "../screens/BenefitDetails";
 import {StatusBar} from "react-native";
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+    BenefitDetails: {descuento: any}
+}
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
     const [isSplashFinished, setIsSplashFinished] = useState(false);
@@ -37,6 +42,7 @@ export default function AppNavigator() {
                             <Stack.Screen name="Validate" component={Validate} />
                             <Stack.Screen name="Success" component={Success} />
                             <Stack.Screen name="Main" component={BottomTabs} />
+                            <Stack.Screen name="BenefitDetails" component={BenefitDetails}/>
                         </>
                     )}
                 </Stack.Navigator>

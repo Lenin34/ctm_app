@@ -2,16 +2,13 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { scale, vs, moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 
 const { width } = Dimensions.get('window');
-
+const imgGrid = (Dimensions.get('window').width * 0.8) / 3;
 export const homeStyles = StyleSheet.create({
-    scroll: {
-        paddingTop: vs(20)
-    },
+
     sectionTitle: {
         fontSize: vs(12),
         fontWeight: 'bold',
         color: '#fff',
-        marginTop: vs(10),
         textAlign: 'center'
     },
     postImage: {
@@ -45,9 +42,9 @@ export const homeStyles = StyleSheet.create({
         width: 140,
     },
     cardImage: {
-        width: 140,
-        height: 140,
-        borderRadius: 16,
+        width: imgGrid,
+        height: imgGrid,
+        borderRadius: 10,
         backgroundColor: '#fff',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -56,15 +53,7 @@ export const homeStyles = StyleSheet.create({
         elevation: 5,
     },
     cardOverlay: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        paddingVertical: 6,
-        paddingHorizontal: 10,
-        backgroundColor: 'rgba(0,0,0,0.55)',
-        borderBottomLeftRadius: 16,
-        borderBottomRightRadius: 16,
+        paddingVertical: vs(3),
     },
     cardText: {
         color: '#fff',
@@ -72,4 +61,21 @@ export const homeStyles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
     },
+    gridContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-evenly',
+        width: '90%',
+        alignSelf: "center",
+    },
+    gridItem: {
+        width: imgGrid,
+        borderRadius: 8,
+        overflow: 'hidden',
+    },
+    colapsableContainer: {
+        width: '100%',
+        backgroundColor: 'rgba(209,209,209,0.5)',
+        paddingHorizontal: vs(8)
+    }
 });

@@ -5,6 +5,8 @@ import Header from '../components/Header';
 import { homeStyles as styles } from '../styles/homeStyle';
 import * as Animatable from 'react-native-animatable';
 import Carusel from "../components/Carusel";
+import {vs} from "react-native-size-matters";
+import Descuentos from "../components/benefits/Descuentos";
 
 const posts = [
     require('../../assets/images/1.jpg'),
@@ -13,14 +15,49 @@ const posts = [
     require('../../assets/images/1.jpg'),
 ];
 
-const descuentos = [
+interface Descuento{
+    idDescuento: string;
+    image: string;
+    titulo: string;
+    vigencia: string;
+    condiciones: string;
+}
+
+const descuentos: Descuento[] = [
     {
-        image: require('../../assets/images/1.jpg'),
-        title: 'Descuento A',
+        idDescuento: '1',
+        image: '../../assets/images/1.jpg',
+        titulo: 'Descuento A',
+        vigencia: '2025-04-16',
+        condiciones: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'
     },
     {
-        image: require('../../assets/images/2.jpg'),
-        title: 'Descuento B',
+        idDescuento: '1',
+        image: '../../assets/images/1.jpg',
+        titulo: 'Descuento B',
+        vigencia: '2025-04-16',
+        condiciones: 'lorem impsuim'
+    },
+    {
+        idDescuento: '1',
+        image: '../../assets/images/1.jpg',
+        titulo: 'Descuento A',
+        vigencia: '2025-04-16',
+        condiciones: 'lorem impsuim'
+    },
+    {
+        idDescuento: '1',
+        image: '../../assets/images/1.jpg',
+        titulo: 'Descuento A',
+        vigencia: '2025-04-16',
+        condiciones: 'lorem impsuim'
+    },
+    {
+        idDescuento: '1',
+        image: '../../assets/images/1.jpg',
+        titulo: 'Descuento A',
+        vigencia: '2025-04-16',
+        condiciones: 'lorem impsuim'
     },
 ];
 
@@ -69,31 +106,16 @@ export default function Home({ navigation }: any) {
             <Header onLogout={handleLogout} />
 
             <Animatable.View animation="fadeInUp" duration={800} delay={200}>
-                <ScrollView contentContainerStyle={styles.scroll}>
+                <ScrollView>
                     {/* POSTS */}
                     <Animatable.View animation="fadeInUp" delay={300}>
                         <Text style={styles.sectionTitle}>LO ÚLTIMO EN REDES SOCIALES</Text>
-{/*                        <ScrollView
-                            ref={scrollRef}
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            pagingEnabled
-                        >
-                            {posts.map((img, index) => (
-                                <Image
-                                    key={index}
-                                    source={img}
-                                    style={styles.postImage}
-                                    resizeMode="cover"
-                                />
-                            ))}
-                        </ScrollView>*/}
                         <Carusel/>
                     </Animatable.View>
 
                     {/* EVENTO */}
                     <Animatable.View animation="fadeInUp" delay={500}>
-                        <Text style={styles.sectionTitle}>¡LO QUE SE VIENE!</Text>
+                        <Text style={[styles.sectionTitle, {marginBottom: vs(6)}]}>¡LO QUE SE VIENE!</Text>
                         <Animated.Image
                             source={require('../../assets/images/3.jpg')}
                             style={[styles.mainBanner, { transform: [{ scale: scaleAnim }] }]}
@@ -103,22 +125,14 @@ export default function Home({ navigation }: any) {
 
                     {/* DESCUENTOS */}
                     <Animatable.View animation="fadeInUp" delay={700}>
-                        <Text style={styles.sectionTitle}>¡APROVECHA NUESTROS DESCUENTOS AQUÍ!</Text>
-                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                            {descuentos.map((item, index) => (
-                                <View key={index} style={styles.card}>
-                                    <Image
-                                        source={item.image}
-                                        style={styles.cardImage}
-                                        resizeMode="cover"
-                                    />
-                                    <View style={styles.cardOverlay}>
-                                        <Text style={styles.cardText}>{item.title}</Text>
-                                    </View>
-                                </View>
-                            ))}
-                        </ScrollView>
+                        <Text style={[styles.sectionTitle, { marginBottom: vs(6) }]}>
+                            ¡APROVECHA NUESTROS DESCUENTOS AQUÍ!
+                        </Text>
+                        <Descuentos descuentos={descuentos}/>
                     </Animatable.View>
+
+
+
                 </ScrollView>
             </Animatable.View>
         </BaseScreen>

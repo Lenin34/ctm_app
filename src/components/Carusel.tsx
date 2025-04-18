@@ -2,11 +2,12 @@ import React from 'react';
 import { Dimensions, View, Image, StyleSheet } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import { useSharedValue } from 'react-native-reanimated';
+import {vs} from "react-native-size-matters";
 
 const { width } = Dimensions.get('window');
-const carouselHeight = 258;
-const imageWidth = width * 0.8;
-const imageHeight = carouselHeight * 0.8;
+const carouselHeight = vs(150);
+const imageWidth = vs(250);
+const imageHeight = vs(150);
 
 // Array de imágenes para el carrusel
 const posts = [

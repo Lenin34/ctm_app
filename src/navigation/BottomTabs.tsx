@@ -36,8 +36,8 @@ export default function BottomTabs() {
                         case 'Tramites':
                             iconName = focused ? 'document-text' : 'document-text-outline';
                             break;
-                        case 'Beneficiarios':
-                            iconName = focused ? 'gift' : 'gift-outline';
+                        case 'Beneficios':
+                            iconName = focused ? 'pricetag' : 'pricetag-outline';
                             break;
                         case 'Perfil':
                             iconName = focused ? 'person' : 'person-outline';
@@ -50,9 +50,10 @@ export default function BottomTabs() {
         >
             <Tab.Screen name="Inicio" component={Home} />
             <Tab.Screen name="Calendario" component={Calendar} />
-            <Tab.Screen name="Tramites" component={Tramit} />
-            <Tab.Screen name="Beneficiarios" component={Benefits} />
             <Tab.Screen name="Perfil" component={Profile} />
+            <Tab.Screen name="Tramites" component={Tramit} />
+            <Tab.Screen name="Beneficios" component={Benefits} />
+
         </Tab.Navigator>
     );
 }
