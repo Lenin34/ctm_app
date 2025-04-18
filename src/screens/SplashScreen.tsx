@@ -5,6 +5,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { splashStyles as styles } from '../styles/splashStyles';
 // @ts-ignore
 import splashIcon from '../../assets/images/logo_ctm.png';
+import { Gradients } from '../constants/theme';
+import LogoSN from "../components/svg/LogoSN";
 
 export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
     useEffect(() => {
@@ -15,7 +17,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
     return (
         <View style={styles.container}>
             <LinearGradient
-                colors={['#0F2027', '#203A43', '#2C5364']}
+                colors={Gradients.blue}
                 style={styles.gradient}
             />
             <Animatable.View
@@ -23,11 +25,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
                 duration={2000}
                 style={styles.logoContainer}
             >
-                <Image
-                    source={splashIcon}
-                    style={styles.logo}
-                    resizeMode="contain"
-                />
+                <LogoSN/>
             </Animatable.View>
         </View>
     );

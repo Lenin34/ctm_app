@@ -16,12 +16,12 @@ export default function BottomTabs() {
             screenOptions={({ route }) => ({
                 headerShown: false,
                 tabBarStyle: {
-                    backgroundColor: '#001f2e',
+                    backgroundColor: '#09263A',
                     borderTopWidth: 0,
                     height: 60,
                 },
-                tabBarActiveTintColor: '#00cc66',
-                tabBarInactiveTintColor: '#aaa',
+                tabBarActiveTintColor: '#02AF14',
+                tabBarInactiveTintColor: '#FFF',
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName: string = '';
 
@@ -50,7 +50,7 @@ export default function BottomTabs() {
             <Tab.Screen name="Inicio" component={Home} />
             <Tab.Screen name="Calendario" component={Calendar} />
             <Tab.Screen name="Perfil" component={Profile} />
-            <Tab.Screen name="Tramites" component={Tramit} />
+            {/*<Tab.Screen name="Tramites" component={Tramit} />*/}
             <Tab.Screen name="Beneficios" component={Benefits} />
 
         </Tab.Navigator>

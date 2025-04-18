@@ -1,42 +1,37 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import {vs} from "react-native-size-matters";
 
-const { width } = Dimensions.get('window');
 
 export const registerStyles = StyleSheet.create({
-    logo: {
-        width: width * 0.3,
-        height: width * 0.3,
-        alignSelf: 'center',
-        marginBottom: 15,
-    },
     title: {
         color: '#fff',
-        fontSize: 22,
+        fontSize: vs(18),
         fontWeight: 'bold',
         textAlign: 'center',
-        marginBottom: 25,
+        marginVertical: vs(8),
     },
     label: {
         color: '#fff',
-        marginBottom: 5,
-        marginTop: 10,
+        marginVertical: vs(5),
     },
     input: {
         backgroundColor: '#fff',
         borderRadius: 30,
-        paddingHorizontal: 20,
-        height: 45,
+        paddingHorizontal: vs(20),
+        paddingVertical: vs(8),
         color: '#000',
+        width: vs(200)
     },
     disabled: {
         opacity: 0.6,
     },
     registerBtn: {
-        backgroundColor: '#00cc66',
+        backgroundColor: '#02AF14',
         borderRadius: 30,
-        marginTop: 20,
-        paddingVertical: 12,
+        marginTop: vs(10),
+        paddingVertical: vs(10),
         alignItems: 'center',
+        width: vs(125)
     },
     registerText: {
         color: '#fff',
@@ -44,9 +39,9 @@ export const registerStyles = StyleSheet.create({
     },
     link: {
         color: '#ccc',
-        fontSize: 14,
+        fontSize: vs(10),
         textAlign: 'center',
-        marginTop: 25,
+        marginTop: vs(50),
         textDecorationLine: 'underline',
     },
     errorText: {
@@ -61,7 +56,6 @@ export const registerStyles = StyleSheet.create({
 
     selectText: {
         color: '#000',
-        paddingVertical: 10,
     },
 
     modalOverlay: {
