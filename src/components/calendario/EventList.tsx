@@ -76,9 +76,11 @@ const EventList = ({ numeroEventos, eventos }: Props) => {
         <Animated.View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.title}>
-                        TIENES {numeroEventos} EVENTOS PRÓXIMOS
-                    </Text>
+                    <View style={{width: '70%'}}>
+                        <Text style={styles.title}>
+                            TIENES {numeroEventos} EVENTOS PRÓXIMOS
+                        </Text>
+                    </View>
                     <TouchableOpacity onPress={handleToggle} style={styles.closeButton}>
                         <X color="white" size={mvs(20)} strokeWidth={3} />
                     </TouchableOpacity>
@@ -125,52 +127,53 @@ const EventList = ({ numeroEventos, eventos }: Props) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'rgba(209,209,209,0.5)',
-        borderRadius: 16,
-        margin: 16,
+        borderRadius: 20,
+        width: '90%',
+        alignSelf: 'center',
         overflow: 'hidden',
     },
     header: {
-        padding: 16,
+        padding: vs(10),
         backgroundColor: '#E52D1D'
     },
     titleContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexDirection: 'column',
         alignItems: 'center',
-        marginBottom: 8,
+        marginBottom: vs(3),
     },
     title: {
         color: 'white',
         fontSize: vs(16),
         fontWeight: 'bold',
-        flex: 1,
         textAlign: 'center',
     },
     closeButton: {
-        marginLeft: 8,
+        position: "absolute",
+        zIndex: 2,
+        right: 0,
+        top: 0
     },
     toggleButton: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 8,
+        padding: vs(5),
     },
     toggleText: {
         color: 'white',
         fontSize: vs(14),
         fontWeight: 'bold',
-        marginRight: 8,
+        marginRight: vs(3),
         textDecorationLine: 'underline',
     },
     content: {
         position: 'absolute',
         width: '100%',
-
+        paddingBottom: vs(20)
     },
     eventItem: {
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        paddingHorizontal: vs(20),
+        paddingTop: vs(20),
     },
     eventDetails: {
         color: 'white',
@@ -181,14 +184,14 @@ const styles = StyleSheet.create({
     dateContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 8,
+        marginVertical: vs(10),
     },
     eventDot: {
         width: vs(12),
         height: vs(12),
         borderRadius: vs(6),
         backgroundColor: '#292468',
-        marginRight: 8,
+        marginRight: vs(5),
     },
     eventDate: {
         color: 'white',
@@ -198,7 +201,6 @@ const styles = StyleSheet.create({
     separator: {
         height: 1,
         backgroundColor: 'rgba(255, 255, 255, 0.3)',
-        marginTop: 12,
     },
 });
 

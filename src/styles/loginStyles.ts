@@ -1,23 +1,24 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import { scale, vs, moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
+
+
 
 export const loginStyles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
-        paddingTop: vs(100),
+        paddingTop: vs(60),
         alignItems: 'center',
     },
     wrapper: {
         flex: 1,
         position: 'relative',
-        backgroundColor: '#000', // fondo por si fallara el gradiente
     },
     title: {
         color: '#ffffff',
         fontSize: vs(18),
-        marginVertical: vs(30),
+        marginVertical: vs(20),
         fontWeight: 'bold',
         textAlign: 'center',
     },
@@ -34,13 +35,11 @@ export const loginStyles = StyleSheet.create({
     },
     input: {
         backgroundColor: '#ffffff',
-        borderRadius: vs(30),
+        borderRadius: 30,
         paddingHorizontal: vs(15),
         color: '#000',
         width: vs(200),
-        paddingVertical: vs(8),
-
-
+        paddingVertical: vs(10),
     },
     iconOverlay: {
         position: 'absolute',
@@ -53,7 +52,7 @@ export const loginStyles = StyleSheet.create({
         marginTop: 20,
         paddingVertical: vs(8),
         alignItems: 'center',
-        width: vs(200)
+        width: vs(125)
     },
     loginText: {
         color: '#fff',
@@ -72,7 +71,7 @@ export const loginStyles = StyleSheet.create({
         textAlign: 'center',
     },
     registerLink: {
-        color: '#00cc66',
+        color: '#D5FFD9',
         fontWeight: 'bold',
         textDecorationLine: 'underline',
         fontSize: vs(11),
