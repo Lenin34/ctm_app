@@ -1,62 +1,71 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import {vs} from "react-native-size-matters";
 
 const { width } = Dimensions.get('window');
 
 export const validateStyles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        paddingTop: 90,
-        paddingHorizontal: 30,
-        paddingBottom: 40,
-        alignItems: 'center',
-    },
     title: {
         color: '#fff',
-        fontSize: 22,
+        fontSize: vs(18),
         fontWeight: 'bold',
         textAlign: 'center',
-        marginTop: 40,
+        marginTop: vs(30),
         marginBottom: 10,
     },
+    green: {
+        backgroundColor: '#D5FFD9',
+        width: vs(200),
+        flexDirection: "row",
+        paddingVertical: vs(3),
+        paddingHorizontal: vs(10),
+        borderRadius: 50,
+        justifyContent: "space-evenly",
+        alignItems: "center"
+    },
     description: {
-        color: '#eee',
-        fontSize: 16,
-        textAlign: 'center',
-        marginBottom: 30,
-        paddingHorizontal: 20,
+        color: '#02AF14',
+        fontSize: vs(10),
+        textAlign: 'left',
+        flexWrap: "wrap",
+        width: vs(110)
     },
     input: {
         backgroundColor: '#fff',
         borderRadius: 30,
-        paddingHorizontal: 20,
-        height: 50,
+        paddingHorizontal: vs(20),
+        paddingVertical: vs(10),
         color: '#000',
-        fontSize: 18,
+        fontSize: vs(12),
         textAlign: 'center',
         letterSpacing: 4,
-        width: '100%',
-        marginBottom: 20,
+        width: vs(200),
+        marginBottom: vs(20),
     },
     validateBtn: {
-        backgroundColor: '#005ea6',
+        backgroundColor: '#8598B9',
         borderRadius: 30,
-        paddingVertical: 12,
-        paddingHorizontal: 40,
+        paddingVertical: vs(8),
         alignItems: 'center',
-        width: '100%',
+        width: vs(125),
     },
     validateText: {
         color: '#fff',
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: vs(12),
     },
     link: {
         color: '#ccc',
-        fontSize: 14,
+        fontSize: vs(10),
         textAlign: 'center',
-        marginTop: 25,
+        marginTop: vs(20),
         textDecorationLine: 'underline',
     },
+    indicaciones: {
+        color: '#FFF',
+        fontSize: vs(12),
+        width: vs(200),
+        textAlign: "center",
+        marginVertical: vs(20)
+    }
 
 });

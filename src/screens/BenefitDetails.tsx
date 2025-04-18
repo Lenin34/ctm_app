@@ -8,11 +8,12 @@ import {RouteProp, useNavigation, useRoute} from "@react-navigation/native";
 import {RootStackParamList} from "../navigation/AppNavigator";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import * as Animatable from "react-native-animatable";
+import WhatsApp from "../components/svg/WhatsApp";
 
 export default function BenefitDetails() {
     const route = useRoute<RouteProp<RootStackParamList, 'BenefitDetails'>>();
     const {descuento} = route.params;
-    if(!descuento) return null;
+    if (!descuento) return null;
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'Home'>>();
     const scrollRef = useRef<ScrollView>(null);
     const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -23,7 +24,7 @@ export default function BenefitDetails() {
         let scrollX = 0;
         const scrollInterval = setInterval(() => {
             scrollX += 300;
-            scrollRef.current?.scrollTo({ x: scrollX, animated: true });
+            scrollRef.current?.scrollTo({x: scrollX, animated: true});
         }, 4000);
 
         return () => clearInterval(scrollInterval);
@@ -47,7 +48,7 @@ export default function BenefitDetails() {
         ).start();
     }, []);
 
-    return(
+    return (
         <BaseScreen>
             <Header/>
             <Animatable.View animation="fadeInUp" duration={800} delay={200} style={styles.container}>
@@ -63,8 +64,14 @@ export default function BenefitDetails() {
                     <Text style={styles.condicionesBody}>{descuento.condiciones}</Text>
                 </ScrollView>
                 <View>
+                    <TouchableOpacity style={styles.solicitar}>
+                        <WhatsApp/>
+                        <Text style={styles.solicitarText}>SOLICITAR POR WHATSAPP </Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
                     <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
-                        <Ionicons name="reload" size={mvs(25, 0.5)} color="#fff" />
+                        <Ionicons name="reload" size={mvs(25, 0.5)} color="#fff"/>
                         <Text style={styles.buttonText}>Regresar</Text>
                     </TouchableOpacity>
                 </View>
@@ -78,14 +85,13 @@ export default function BenefitDetails() {
 const styles = StyleSheet.create({
         container: {
             backgroundColor: 'rgba(209,209,209,0.5)',
-            paddingHorizontal: vs(30),
             paddingVertical: vs(14),
             width: '80%',
             marginHorizontal: 'auto',
             marginTop: vs(100),
             borderRadius: 20,
             alignItems: "center",
-            paddingTop: vs(100),
+            paddingTop: vs(115),
             justifyContent: "space-evenly",
         },
         img: {
@@ -114,8 +120,8 @@ const styles = StyleSheet.create({
             marginBottom: vs(15),
         },
         condicionesContainer: {
-            width: '100%',
-            maxHeight: vs(100),
+            width: vs(200),
+            maxHeight: vs(110),
             backgroundColor: '#FFF',
             borderRadius: 20,
             padding: vs(15),
@@ -138,7 +144,28 @@ const styles = StyleSheet.create({
             fontSize: vs(14),
             paddingLeft: vs(5),
             color: '#FFF'
-        }
+        },
+        solicitar: {
+            backgroundColor: '#02AF14',
+            flexDirection: "row",
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingVertical: vs(8),
+            width: vs(200),
+            borderRadius: 20,
+            marginBottom: vs(10),
+            elevation: 8,
+            shadowColor: '#000',
+            shadowOpacity: 0.2,
+            shadowOffset: {width: 2, height: 2},
+        },
+    solicitarText: {
+            fontSize: vs(10),
+        width: '60%',
+        textAlign: "center",
+        color: '#FFF',
+        fontWeight: '900'
+    }
 
     },
 );

@@ -10,6 +10,7 @@ import Success from '../screens/Success';
 import BottomTabs from './BottomTabs';
 import BenefitDetails from "../screens/BenefitDetails";
 import {StatusBar} from "react-native";
+import AvisoPrivacidad from "../screens/AvisoPrivacidad";
 
 export type RootStackParamList = {
     BenefitDetails: {descuento: any}
@@ -25,7 +26,7 @@ export default function AppNavigator() {
             <StatusBar
                 barStyle="light-content"
                 translucent={false}
-                backgroundColor="#0F2027"
+                backgroundColor="#0B3F61"
             />
             <NavigationContainer>
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -43,6 +44,7 @@ export default function AppNavigator() {
                             <Stack.Screen name="Success" component={Success} />
                             <Stack.Screen name="Main" component={BottomTabs} />
                             <Stack.Screen name="BenefitDetails" component={BenefitDetails}/>
+                            <Stack.Screen name="AvisoPrivacidad" component={AvisoPrivacidad}/>
                         </>
                     )}
                 </Stack.Navigator>
