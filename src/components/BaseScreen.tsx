@@ -49,5 +49,6 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         justifyContent: 'center',
+        paddingBottom: 80
     },
 });

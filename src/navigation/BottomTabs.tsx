@@ -8,6 +8,7 @@ import Tramit from '../screens/Tramit';
 import Benefits from '../screens/Benefits';
 import Profile from '../screens/Profile';
 
+
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabs() {
