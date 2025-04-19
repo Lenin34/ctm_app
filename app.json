@@ -5,7 +5,6 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/SINDICATO_NACIONAL.png",
-
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -13,17 +12,36 @@
       "resizeMode": "contain",
       "backgroundColor": "#0B3F61"
     },
+    "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/messaging",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ctm.ctm-app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/SINDICATO_NACIONAL.png",
         "backgroundColor": "#0B3F61"
-      }
+      },
+      "package": "com.ctm.ctm_app"
     },
     "web": {
       "favicon": "./assets/images/SINDICATO_NACIONAL.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5545dd86-367c-4925-b522-8d1bcd1ac827"
+      }
     }
   }
 }
