@@ -20,10 +20,10 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/SINDICATO_NACIONAL.png",
-        "backgroundColor": "#0B3F61",
-        "googleServicesFile": "./google-services.json"
+        "backgroundColor": "#0B3F61"
       },
-      "package": "com.ctm.app"
+      "package": "com.ctm.app",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/images/SINDICATO_NACIONAL.png"
