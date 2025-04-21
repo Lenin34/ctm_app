@@ -35,7 +35,8 @@
     "react-native-size-matters": "^0.4.2",
     "react-native-stack-view": "^0.7.0",
     "react-native-svg": "15.8.0",
-    "react-native-web": "~0.19.13"
+    "react-native-web": "~0.19.13",
+    "expo-dev-client": "~5.0.20"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
