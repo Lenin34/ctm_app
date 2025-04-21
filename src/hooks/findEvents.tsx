@@ -10,7 +10,7 @@ type Props = {
     apiEvents: Event[];
 }
 export default function findEvents({ date, apiEvents }: Props): Event[] {
-    let events: Event[] = []
+    let events: Event[] = [];
     for (const event of apiEvents) {
         if (event.date === date) {
             events.push(event);
