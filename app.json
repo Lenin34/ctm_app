@@ -14,8 +14,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ctm.app",
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "bundleIdentifier": "com.masoftcode.ctmapp2",
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
