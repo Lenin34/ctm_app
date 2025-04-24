@@ -66,6 +66,38 @@ export const validateStyles = StyleSheet.create({
         width: vs(200),
         textAlign: "center",
         marginVertical: vs(20)
-    }
+    },
+    resendBtn: {
+        marginTop: vs(20),
+    },
+    resendText: {
+        color: '#02AF14',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textDecorationLine: 'underline',
+    },
+    disabledBtn: {
+        opacity: 0.4,
+    },
+    inputError: {
+        borderColor: 'red',
+        borderWidth: 1,
+    },
 
+    inputSuccess: {
+        borderColor: '#02AF14',
+        borderWidth: 1,
+    },
+
+    errorText: {
+        color: 'red',
+        fontSize: 12,
+        marginTop: 5,
+    },
+
+    successText: {
+        color: '#02AF14',
+        fontSize: 12,
+        marginTop: 5,
+    },
 });

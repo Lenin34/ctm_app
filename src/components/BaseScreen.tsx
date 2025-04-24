@@ -40,7 +40,7 @@ export default function BaseScreen({ children, scroll = true, style }: Props) {
                     style={{ flex: 1 }}
                 >
                     <View style={styles.wrapper}>
-                        <Content contentContainerStyle={[styles.contentContainer, style]}>
+                        <Content keyboardShouldPersistTaps="handled" contentContainerStyle={[styles.contentContainer, style]}>
                             {children}
                         </Content>
                     </View>

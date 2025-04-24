@@ -94,16 +94,10 @@ export default function Home({ navigation }: any) {
         ).start();
     }, []);
 
-    const handleLogout = () => {
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'Login' }],
-        });
-    };
 
     return (
         <BaseScreen>
-            <Header onLogout={handleLogout} />
+            <Header/>
 
             <Animatable.View animation="fadeInUp" duration={800} delay={200}>
                 <ScrollView>

@@ -4,6 +4,10 @@ import BaseScreen from '../components/BaseScreen';
 import {registerStyles as styles} from '../styles/registerStyles';
 import {useValidation, ValidationErrors} from '../hooks/useValidation';
 import LogoSN from "../components/svg/LogoSN";
+import { useAuth } from '../context/AuthContext';
+import { Alert } from 'react-native';
+import { showErrorAlert } from '../utils/alertUtils';
+
 // @ts-ignore
 import logoCTM from '../../assets/images/logo_ctm.png';
 import CompanySelector from '../components/CompanySelector';
@@ -28,6 +32,8 @@ export default function Register({navigation}: any) {
         if (errors[key]) setErrors({...errors, [key]: undefined});
     };
 
+    const { register } = useAuth();
+
     const validateForm = () => {
         const newErrors: ValidationErrors = {};
         if (!form.workerId.trim()) newErrors.workerId = 'Campo requerido';
@@ -44,13 +50,29 @@ export default function Register({navigation}: any) {
         return newErrors;
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         const validationErrors = validateForm();
         setErrors(validationErrors);
 
         if (Object.keys(validationErrors).length === 0) {
-            console.log('Formulario válido:', form);
-            navigation.navigate('Validate');
+            const payload = {
+                curp: form.curp,
+                email: form.email,
+                password: form.password,
+                phone_number: form.phone,
+                employee_number: form.workerId,
+                company_id: 1
+            };
+
+
+            const response = await register(payload);
+
+            if (response?.error) {
+                console.log('❌ Error al registrar:', response);
+                showErrorAlert(response);
+            } else {
+                navigation.navigate('Validate', { userId: response.user_id });
+            }
         }
     };
 

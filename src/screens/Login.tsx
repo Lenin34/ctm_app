@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
     ScrollView,
     Text,
@@ -9,36 +9,42 @@ import {
     View,
     StyleSheet, SafeAreaView, Dimensions,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
+import {LinearGradient} from 'expo-linear-gradient';
+import {Ionicons} from '@expo/vector-icons';
 
-import { loginStyles as styles } from '../styles/loginStyles';
-import { Gradients } from '../constants/theme';
-import { useValidation, ValidationErrors } from '../hooks/useValidation';
+import {loginStyles as styles} from '../styles/loginStyles';
+import {Gradients} from '../constants/theme';
+import {useValidation, ValidationErrors} from '../hooks/useValidation';
 import LogoCTM from '../components/svg/LogoCTM';
 import FondoAzul from "../components/svg/fondoAzul";
 import {mvs, vs} from 'react-native-size-matters';
 import LogoSN from "../components/svg/LogoSN";
 import AvisoPrivacidad from "./AvisoPrivacidad";
+import { useAuth } from '../context/AuthContext';
+import { Alert } from 'react-native';
 
-export default function Login({ navigation }: any) {
+
+export default function Login({navigation}: any) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState<ValidationErrors>({});
-    const { validateLogin } = useValidation();
-    const { width, height } = Dimensions.get('window');
+    const {validateLogin} = useValidation();
+    const {width, height} = Dimensions.get('window');
+    const {login} = useAuth();
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         const validationErrors = validateLogin({ email, password });
         setErrors(validationErrors);
 
         if (Object.keys(validationErrors).length === 0) {
-            // Navega a la pantalla principal con Bottom Tabs
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Main' }],
-            });
+            const result = await login(email.trim(), password);
+
+            console.log('Login...');
+
+            if (!result?.token) {
+                Alert.alert('Error', result?.msg || 'Error al iniciar sesión');
+            }
         }
     };
 
@@ -50,14 +56,14 @@ export default function Login({ navigation }: any) {
                     colors={Gradients.blue}
                     style={StyleSheet.absoluteFillObject}
                 />
-                <View style={{ position: 'absolute', bottom: 0 }}>
-                    <FondoAzul width={width} />
+                <View style={{position: 'absolute', bottom: 0}}>
+                    <FondoAzul width={width}/>
                 </View>
             </View>
 
 
             <KeyboardAvoidingView
-                style={{ flex: 1 }}
+                style={{flex: 1}}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 
             >
@@ -76,7 +82,7 @@ export default function Login({ navigation }: any) {
                             value={email}
                             onChangeText={(text) => {
                                 setEmail(text);
-                                if (errors.email) setErrors({ ...errors, email: undefined });
+                                if (errors.email) setErrors({...errors, email: undefined});
                             }}
                             placeholder="Correo electrónico"
                             placeholderTextColor="#aaa"
@@ -91,7 +97,7 @@ export default function Login({ navigation }: any) {
                                 value={password}
                                 onChangeText={(text) => {
                                     setPassword(text);
-                                    if (errors.password) setErrors({ ...errors, password: undefined });
+                                    if (errors.password) setErrors({...errors, password: undefined});
                                 }}
                                 placeholder="Contraseña"
                                 placeholderTextColor="#aaa"
@@ -120,7 +126,12 @@ export default function Login({ navigation }: any) {
                             <Text style={styles.link}>Olvidé mi contraseña</Text>
                         </TouchableOpacity>
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: vs(15), alignItems: 'center' }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            marginTop: vs(15),
+                            alignItems: 'center'
+                        }}>
                             <Text style={styles.registerText}>¿No tienes cuenta? </Text>
                             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                                 <Text style={styles.registerLink}>Regístrate</Text>
