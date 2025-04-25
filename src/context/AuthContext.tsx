@@ -18,6 +18,10 @@ interface AuthContextProps {
 interface AuthState {
     token: string | null;
     user: {
+        email: string;
+        phone_number: string;
+        last_name: string;
+        name: string;
         user_id: any;
         company_id: any;
         employee_number: any;
@@ -41,6 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         authenticated: false,
         loading: true,
     });
+
 
     useEffect(() => {
         const loadAuth = async () => {
@@ -72,11 +77,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     const login = async (email: string, password: string) => {
+
         try {
             console.log('🔐 Iniciando login...');
             const { data } = await axios.post(`${API_URL}/login`, { email, password });
 
             const token = data.token;
+
+            await SecureStore.setItemAsync('user_id', String(data.user_id));
+            await SecureStore.setItemAsync('company_id', String(data.company_id));
+
             if (!token) {
                 console.warn('❌ No se recibió el token');
                 return { error: true, msg: 'Credenciales incorrectas o token faltante' };

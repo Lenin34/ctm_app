@@ -1,6 +1,7 @@
 // src/services/userService.ts
 import axios from 'axios';
 import { API_URL } from '../constants/config';
+import * as SecureStore from 'expo-secure-store';
 
 export interface ApiResponse {
     error: boolean;
@@ -20,7 +21,16 @@ export interface ApiResponse {
 
 export const getProfile = async (): Promise<ApiResponse> => {
     try {
-        const { data } = await axios.get(`${API_URL}/users/me/profile`);
+        const userId = await SecureStore.getItemAsync('user_id');
+
+        if (!userId) {
+            return {
+                error: true,
+                msg: 'No se encontró el ID del usuario en SecureStore.'
+            };
+        }
+
+        const { data } = await axios.get(`${API_URL}/users/${userId}/profile`);
         return {
             error: false,
             profile: data.profile
@@ -38,15 +48,17 @@ export const getProfile = async (): Promise<ApiResponse> => {
 /**
  * Actualiza el perfil del usuario.
  */
-export const updateProfile = async (userId: number, payload: any) => {
+export const updateProfile = async (userId: number, payload: any): Promise<ApiResponse> => {
     try {
-        const { data } = await axios.put(`${API_URL}/users/${userId}/profile`, payload);
-        return { error: false, data };
+        const { data } = await axios.post(`${API_URL}/users/${userId}/profile`, payload);
+        return {
+            error: false,
+            msg: data.message,
+        };
     } catch (error: any) {
-        console.error('❌ Error al actualizar perfil:', error.response?.data || error.message);
         return {
             error: true,
-            msg: error.response?.data?.message || 'No se pudo actualizar el perfil.',
+            msg: error?.response?.data?.message || 'Error al actualizar perfil',
         };
     }
 };

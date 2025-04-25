@@ -5,7 +5,6 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/SINDICATO_NACIONAL.png",
-
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -24,6 +23,11 @@
     },
     "web": {
       "favicon": "./assets/images/SINDICATO_NACIONAL.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "57575f7b-284c-413e-8a60-0f90bb9faac8"
+      }
     }
   }
 }

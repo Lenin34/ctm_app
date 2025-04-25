@@ -12,7 +12,7 @@ import ProfileForm from '../components/profile/ProfileForm';
 import ProfileActions from '../components/profile/ProfileActions';
 import { showErrorAlert, showApiErrorAlert,showSuccessAlert } from '../utils/alertUtils';
 import ChangePassword from "./ChangePassword";
-
+import BeneficiariosScreen from "./BeneficiariosScreen";
 export default function Profile({ navigation }: any) {
     const { authState, setAuthState } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
@@ -58,14 +58,29 @@ export default function Profile({ navigation }: any) {
             return;
         }
 
+        // Construimos el payload nuevo
         const payload = {
-            name: formData.nombre,
-            last_name: formData.apellidoPaterno,
-            phone_number: formData.telefono,
-            email: formData.correo,
+            name: formData.nombre.trim(),
+            last_name: formData.apellidoPaterno.trim(),
+            phone_number: formData.telefono.trim(),
+            email: formData.correo.trim(),
             employee_number: authState.user?.employee_number,
             company_id: authState.user?.company_id,
         };
+
+
+        const hasChanges =
+            payload.name !== authState.user?.name ||
+            payload.last_name !== authState.user?.last_name ||
+            payload.phone_number !== authState.user?.phone_number ||
+            payload.email !== authState.user?.email;
+
+        if (!hasChanges) {
+            showErrorAlert({ error: { code: 'NO_CHANGES', message: 'No has realizado ningún cambio.' } });
+            setIsEditing(false);
+            return;
+        }
+
 
         const result = await updateProfile(userId, payload);
 
@@ -107,6 +122,7 @@ export default function Profile({ navigation }: any) {
         setIsEditing(false);
     };
 
+
     const handleLogout = () => {
         navigation.reset({
             index: 0,
@@ -129,7 +145,7 @@ export default function Profile({ navigation }: any) {
                     onEditToggle={() => setIsEditing(true)}
                     onSaveProfile={handleSaveProfile}
                     onChangePassword={() => navigation.navigate('ChangePassword')}
-                    onViewBeneficiaries={() => navigation.navigate('Beneficiarios')}
+                    onViewBeneficiaries={() => navigation.navigate('BeneficiariosScreen')}
                     onViewCredential={() => navigation.navigate('Credencial')}
                 />
             </View>

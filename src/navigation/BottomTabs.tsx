@@ -13,6 +13,7 @@ const Tab = createBottomTabNavigator();
 export default function BottomTabs() {
     return (
         <Tab.Navigator
+            id={undefined}
             screenOptions={({ route }) => ({
                 headerShown: false,
                 tabBarStyle: {
@@ -33,7 +34,7 @@ export default function BottomTabs() {
 
                     const iconName = icons[route.name] || 'alert-circle-outline';
 
-                    return <Ionicons name={iconName} size={size} color={color} />;
+                    return <Ionicons string={iconName} size={size} color={color} />;
                 },
             })}
         >

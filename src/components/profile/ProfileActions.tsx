@@ -27,7 +27,7 @@ export default function ProfileActions({
 
     return (
         <>
-            {/* 🔄 Acciones principales en fila */}
+
             <View style={styles.buttonRow}>
                 <TouchableOpacity style={styles.updateButton} onPress={handlePrimaryAction}>
                     <Ionicons name="create-outline" size={16} color="#fff"/>
@@ -43,13 +43,13 @@ export default function ProfileActions({
 
             </View>
 
-            {/* 👥 Botón: Beneficiarios */}
             <TouchableOpacity style={styles.greenButton} onPress={onViewBeneficiaries}>
                 <Ionicons name="people-outline" size={16} color="#fff"/>
                 <Text style={styles.buttonText}>VER BENEFICIARIOS</Text>
+
             </TouchableOpacity>
 
-            {/* 🪪 Botón: Credencial digital */}
+
             <TouchableOpacity style={styles.blueButton} onPress={onViewCredential}>
                 <Ionicons name="card-outline" size={16} color="#fff"/>
                 <Text style={styles.buttonText}>VER CREDENCIAL DIGITAL</Text>

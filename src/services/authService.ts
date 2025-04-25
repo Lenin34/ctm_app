@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { API_URL } from '../constants/config';
 import { ApiResponse } from './profileService';
+import * as SecureStore from 'expo-secure-store';
 
 export interface RegisterPayload {
     curp: string;
@@ -17,6 +18,7 @@ export interface RegisterPayload {
  */
 export async function loginUser(email: string, password: string) {
     try {
+
         const { data } = await axios.post(`${API_URL}/login`, {
             email,
             password,
@@ -51,11 +53,22 @@ export const registerUser = async (payload: RegisterPayload) => {
 };
 
 /**
- * Obtener el perfil del usuario autenticado (GET /users/me/profile).
+ * Obtener el perfil del usuario autenticado (GET ).
  */
 export const getProfile = async (): Promise<ApiResponse> => {
     try {
-        const { data } = await axios.get(`${API_URL}/users/me/profile`);
+        const userIdStr = await SecureStore.getItemAsync('user_id');
+
+        if (!userIdStr) {
+            return {
+                error: true,
+                msg: 'No se encontró el ID del usuario en SecureStore.'
+            };
+        }
+
+        const userId = parseInt(userIdStr, 10);
+
+        const { data } = await axios.get(`${API_URL}/users/${userId}/profile`);
         return {
             error: false,
             profile: data.profile

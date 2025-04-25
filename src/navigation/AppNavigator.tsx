@@ -11,9 +11,10 @@ import Register from '../screens/Register';
 import Validate from '../screens/ValidateCode';
 import Success from '../screens/Success';
 import BottomTabs from './BottomTabs';
-import BenefitDetails from '../screens/BenefitDetails';
+import BeneficiariosScreen from '../screens/BenefitDetails';
 import AvisoPrivacidad from '../screens/AvisoPrivacidad';
 import ChangePassword from '../screens/ChangePassword';
+import Beneficiarios from '../screens/BeneficiariosScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,7 +42,8 @@ export default function AppNavigator() {
                     ) : (
                         <>
                             <Stack.Screen name="Main" component={BottomTabs} />
-                            <Stack.Screen name="BenefitDetails" component={BenefitDetails} />
+                            <Stack.Screen name="BeneficiariosScreen" component={BeneficiariosScreen} />
+                            <Stack.Screen name="Benefits" component={Beneficiarios}/>
                             <Stack.Screen name="AvisoPrivacidad" component={AvisoPrivacidad} />
                             <Stack.Screen name="ChangePassword" component={ChangePassword} />
                         </>
