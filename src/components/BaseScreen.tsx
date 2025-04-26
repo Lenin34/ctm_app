@@ -6,11 +6,14 @@ import {
     Platform,
     StyleSheet,
     StyleProp,
-    ViewStyle, SafeAreaView, StatusBar, Dimensions,
+    ViewStyle,
+    SafeAreaView,
+    StatusBar,
+    Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Gradients } from '../constants/theme';
-import FondoAzul from "./svg/fondoAzul";
+import FondoAzul from './svg/fondoAzul';
 
 type Props = {
     children: React.ReactNode;
@@ -19,34 +22,48 @@ type Props = {
 };
 
 export default function BaseScreen({ children, scroll = true, style }: Props) {
-    const Content = scroll ? ScrollView : View;
-    const { width, height } = Dimensions.get('window');
+    const { width } = Dimensions.get('window');
+
+    const renderContent = () => {
+        if (scroll) {
+            return (
+                <ScrollView
+                    keyboardShouldPersistTaps="handled"
+                    contentContainerStyle={[styles.contentContainer, style]}
+                >
+                    {children}
+                </ScrollView>
+            );
+        }
+
+        return (
+            <View style={[styles.contentContainer, style]}>
+                {children}
+            </View>
+        );
+    };
 
     return (
-            <SafeAreaView style={{flex: 1, backgroundColor: '#0B3F61'}} >
-
-                <View style={StyleSheet.absoluteFill}>
-                    <LinearGradient
-                        colors={Gradients.blue}
-                        style={StyleSheet.absoluteFillObject}
-                    />
-                    <View style={{ position: 'absolute', bottom: 0 }}>
-                        <FondoAzul width={width} />
-                    </View>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#0B3F61' }}>
+            <View style={StyleSheet.absoluteFill}>
+                <LinearGradient
+                    colors={Gradients.blue}
+                    style={StyleSheet.absoluteFillObject}
+                />
+                <View style={{ position: 'absolute', bottom: 0 }}>
+                    <FondoAzul width={width} />
                 </View>
+            </View>
 
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                    style={{ flex: 1 }}
-                >
-                    <View style={styles.wrapper}>
-                        <Content keyboardShouldPersistTaps="handled" contentContainerStyle={[styles.contentContainer, style]}>
-                            {children}
-                        </Content>
-                    </View>
-                </KeyboardAvoidingView>
-            </SafeAreaView>
-
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                style={{ flex: 1 }}
+            >
+                <View style={styles.wrapper}>
+                    {renderContent()}
+                </View>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 }
 
@@ -54,10 +71,10 @@ const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
         position: 'relative',
-
     },
     contentContainer: {
         justifyContent: 'center',
-        paddingBottom: 80
+        paddingBottom: 80,
+        flexGrow: 1,
     },
 });

@@ -10,7 +10,7 @@ import { showErrorAlert } from '../utils/alertUtils';
 
 // @ts-ignore
 import logoCTM from '../../assets/images/logo_ctm.png';
-import CompanySelector from '../components/CompanySelector';
+import CompanySelector from '../components/common/CompanySelector';
 import LogoCTM from "../components/svg/LogoCTM";
 import {mvs, vs} from "react-native-size-matters";
 

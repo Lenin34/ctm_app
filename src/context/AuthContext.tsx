@@ -5,6 +5,7 @@ import axios from 'axios';
 import { API_URL } from '../constants/config';
 import { getProfile, registerUser } from '../services/authService';
 import type { RegisterPayload } from '../services/authService';
+import {ImageSourcePropType} from "react-native";
 
 interface AuthContextProps {
     authState: AuthState;
@@ -18,6 +19,8 @@ interface AuthContextProps {
 interface AuthState {
     token: string | null;
     user: {
+        photo: ImageSourcePropType | undefined;
+        company_name: any;
         email: string;
         phone_number: string;
         last_name: string;
