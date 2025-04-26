@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Text, View, ScrollView, Image, Animated } from 'react-native';
 import BaseScreen from '../components/BaseScreen';
-import Header from '../components/Header';
+import Header from '../components/common/Header';
 import { homeStyles as styles } from '../styles/homeStyle';
 import * as Animatable from 'react-native-animatable';
 import Carusel from "../components/Carusel";

@@ -3,7 +3,7 @@ import {Ionicons} from "@expo/vector-icons";
 import {mvs, vs} from "react-native-size-matters";
 import React, {useEffect, useRef} from "react";
 import BaseScreen from "../components/BaseScreen";
-import Header from "../components/Header";
+import Header from "../components/common/Header";
 import {RouteProp, useNavigation, useRoute} from "@react-navigation/native";
 import {RootStackParamList} from "../navigation/AppNavigator";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
