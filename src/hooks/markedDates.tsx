@@ -1,33 +1,63 @@
-export function generateMarkedDates(apiEvents: { date: string }[]) {
-    const today = new Date().toISOString().split('T')[0];
+interface Evento {
+    id: string;
+    description: string;
+    end_date: string;
+    start_date: string;
+    image: string;
+    title: string;
+}
 
-    const result: { [date: string]: any } = {
-        [today]: {
-            customStyles: {
-                container: {
-                    backgroundColor: 'red',
-                    borderRadius: 20,
-                },
-                text: {
-                    color: '#ffffff',
-                    fontWeight: 'bold',
-                },
-            },
-        },
-    };
+// Define aquí los colores que quieras usar para cada “tipo” de evento
+const COLORS = [
+    '#F8931E',
+    '#4FC6C0',
+    '#FFFFFF',
+    '#0B3F61',
+    '#269CD9',
+];
 
-    apiEvents.forEach(event => {
-        result[event.date] = {
-            customStyles: {
-                container: {
-                    backgroundColor: '#292468',
-                    borderRadius: 20,
-                },
-                text: {
-                    color: '#ffffff',
-                },
-            },
+interface MarkedDateStyle {
+    customStyles: {
+        container: {
+            backgroundColor: string;
+            borderRadius: number;
         };
+        text: {
+            color: string;
+            fontWeight?: 'bold';
+        };
+    };
+}
+
+export function generateMarkedDates(apiEvents: Evento[]): {
+    [date: string]: { dots: { key: string; color: string; selectedDotColor?: string; id: string; }[] }
+} {
+    const result: Record<string, { dots: Array<{ key: string; color: string; selectedDotColor?: string; id: string }> }> = {};
+
+    apiEvents.forEach((evt, idx) => {
+        const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+        const start = evt.start_date.split(' ')[0];
+        const end   = evt.end_date.split(' ')[0];
+
+        let curr = new Date(start);
+        const last = new Date(end);
+
+        while (curr <= last) {
+            const dayKey = curr.toISOString().split('T')[0];
+
+            if (!result[dayKey]) {
+                result[dayKey] = { dots: [] };
+            }
+
+            result[dayKey].dots.push({
+                key: `evt${evt.id}`,   // debe ser único por “dot”
+                color,
+                selectedDotColor: color, // opcional: color cuando está seleccionado
+                id: evt.id,
+            });
+
+            curr.setDate(curr.getDate() + 1);
+        }
     });
 
     return result;

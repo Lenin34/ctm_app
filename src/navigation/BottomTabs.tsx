@@ -34,7 +34,7 @@ export default function BottomTabs() {
 
                     const iconName = icons[route.name] || 'alert-circle-outline';
 
-                    return <Ionicons string={iconName} size={size} color={color} />;
+                    return <Ionicons name={iconName} size={size} color={color} />;
                 },
             })}
         >

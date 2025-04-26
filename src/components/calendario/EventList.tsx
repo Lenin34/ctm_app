@@ -23,9 +23,12 @@ import { LocaleConfig } from 'react-native-calendars';
 import RotableChevronDown from './RotableChevronDown';
 
 interface Evento {
-    idEvento: string;
-    date: string;
-    details: string;
+    id: string;
+    description: string;
+    end_date: string;
+    start_date: string;
+    image: string;
+    title: string;
 }
 
 type Props = {
@@ -34,6 +37,7 @@ type Props = {
 };
 
 const EventList = ({ numeroEventos, eventos }: Props) => {
+
     const locale = LocaleConfig.locales[LocaleConfig.defaultLocale];
 
     const listRef = useAnimatedRef<Animated.View>();
@@ -107,12 +111,12 @@ const EventList = ({ numeroEventos, eventos }: Props) => {
                     }}
                 >
                     {eventos.map((evento) => (
-                        <View key={evento.idEvento} style={styles.eventItem}>
-                            <Text style={styles.eventDetails}>{evento.details}</Text>
+                        <View key={String(evento.id)} style={styles.eventItem}>
+                            <Text style={styles.eventDetails}>{evento.description}</Text>
                             <View style={styles.dateContainer}>
                                 <View style={styles.eventDot} />
                                 <Text style={styles.eventDate}>
-                                    {convertirFecha(evento.date)}
+                                    {convertirFecha(evento.start_date)}
                                 </Text>
                             </View>
                             <View style={styles.separator} />

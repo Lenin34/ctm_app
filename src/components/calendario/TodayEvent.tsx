@@ -3,9 +3,12 @@ import {vs} from "react-native-size-matters";
 
 
 interface Evento {
-    idEvento: string;
-    date: string;
-    details: string;
+    id: string;
+    description: string;
+    end_date: string;
+    start_date: string;
+    image: string;
+    title: string;
 }
 
 type Props = {
@@ -15,12 +18,12 @@ export default function TodayEvent({eventos}: Props){
     return(
         <View style={styles.container}>
             <View style={styles.header}>
-                {eventos[0].details === 'NO HAY EVENTOS DISPONIBLES' ? (
-                    <Text style={styles.headerText}>{eventos[0].date}</Text>
+                {eventos[0].description === 'NO HAY EVENTOS DISPONIBLES' ? (
+                    <Text style={styles.headerText}>{eventos[0].start_date}</Text>
                 ) : (
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={styles.dot}/>
-                        <Text style={styles.headerText}>{eventos[0].date}</Text>
+                        <Text style={styles.headerText}>{eventos[0].start_date}</Text>
                     </View>
                 )}
 
@@ -30,11 +33,11 @@ export default function TodayEvent({eventos}: Props){
                 {eventos.length > 1 ? (
                     <>
                         {eventos.map((item: Evento) => (
-                            <Text style={[styles.detailsText, {}]}>{`\u2022 ${item.details.toUpperCase()}`}</Text>
+                            <Text key={item.id} style={[styles.detailsText, {}]}>{`\u2022 ${item.description.toUpperCase()}`}</Text>
                         ))}
                     </>
                 ) : (
-                    <Text style={styles.detailsText}>{eventos[0].details}</Text>
+                    <Text style={styles.detailsText}>{eventos[0].description}</Text>
                 )}
             </View>
         </View>

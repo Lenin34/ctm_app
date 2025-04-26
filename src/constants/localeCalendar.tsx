@@ -13,7 +13,9 @@ LocaleConfig.locales['es'] = {
     dayNames: [
         'domingo','lunes','martes','miércoles','jueves','viernes','sábado'
     ],
-    dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa']
+    dayNamesShort: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+    monthLastDay: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+
 };
 
 LocaleConfig.defaultLocale = 'es';
