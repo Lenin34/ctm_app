@@ -34,8 +34,15 @@ export default function Calendar({navigation}) {
     const [calendarIdSelected, setCalendarIdSelected] = useState<string[]>([''])
     const [numeroEventos, setNumeroeventos] = useState(0);
     const today = new Date();
-    const [startDate, setStartDate] = useState<string>(formatYMDWithOffset(today, 0, true))
-    const [endDate, setEndDate] = useState<string>(formatYMDWithOffset(today, 0, false))
+
+    //variables para control de fetch
+    const [memory, setMemory] = useState<string[]>(['']);
+    const [accumulatedMarkedDates, setAccumulatedMarkedDates] = useState<{
+        [p: string]: { dots: { key: string; color: string; selectedDotColor?: string; id: string }[] }
+    }>({})
+    const [eventos, setEventos] = useState<Evento[]>([]);
+
+
 
 // en Calendar.tsx
     const [dateRange, setDateRange] = useState({
@@ -50,11 +57,16 @@ export default function Calendar({navigation}) {
         });
     };
 
-    const { eventos, loading, error } = useEventos({
+    const { loading, error } = useEventos({
         companyId: '1',
         start_date: dateRange.start,
         end_date:   dateRange.end,
         amount:    '100',
+        memory: memory,
+        setMemory,
+        eventos: eventos,
+        setEventos,
+        setAccumulatedMarkedDates,
     });
 
     const [calendarDaySelectedJson, setCalendarDaySelectedJson]= useState<Evento[]>(findEvents({
@@ -63,12 +75,9 @@ export default function Calendar({navigation}) {
         apiEvents: eventos,
     }))
 
-
-    const markedDates = generateMarkedDates(eventos);
-
-
     useEffect(() => {
         setNumeroeventos(eventos.length);
+        //setModalSuccessVisible(true);
     }, [eventos]);
 
 
@@ -80,7 +89,7 @@ export default function Calendar({navigation}) {
         });
 
         setCalendarDaySelectedJson(calendarDaySelectedJson)
-    }, [calendarDaySelected, eventos]);
+    }, [calendarDaySelected]);
 
 
     useEffect(() => {
@@ -119,11 +128,9 @@ export default function Calendar({navigation}) {
             <Animatable.View animation="fadeInUp" duration={800} delay={200}>
 
                 <CalendarComponent
-                    markedDates={markedDates}
+                    markedDates={accumulatedMarkedDates}
                     setCalendarDaySelected={setCalendarDaysSelected}
                     setCalendarIdSelected={setCalendarIdSelected}
-                    setStartDate={setStartDate}
-                    setEndDate={setEndDate}
                     setDataRange={setDateRange}
                 />
 

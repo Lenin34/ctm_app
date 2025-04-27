@@ -1,11 +1,15 @@
 import * as React from "react";
 import Svg, { G, Path, Defs, LinearGradient, Stop } from "react-native-svg";
+import {Dimensions} from "react-native";
+const { width } = Dimensions.get('window');
+const aspectRatio = 577 / 393;
+const height = width * aspectRatio;
 /* SVGR has dropped some elements not supported by react-native-svg: filter */
 function SVGComponent (props) {
   return(
       <Svg
-          width={393}
-          height={577}
+          width={width}
+          height={width * aspectRatio}
           viewBox="0 0 393 577"
           fill="none"
           {...props}

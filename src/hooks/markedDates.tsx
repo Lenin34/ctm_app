@@ -50,7 +50,7 @@ export function generateMarkedDates(apiEvents: Evento[]): {
             }
 
             result[dayKey].dots.push({
-                key: `evt${evt.id}`,   // debe ser único por “dot”
+                key: `evt${evt.id}-${start}`,   // debe ser único por “dot”
                 color,
                 selectedDotColor: color, // opcional: color cuando está seleccionado
                 id: evt.id,

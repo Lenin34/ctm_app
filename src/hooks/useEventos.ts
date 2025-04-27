@@ -5,12 +5,19 @@ import { useAuth } from '../context/AuthContext';
 import {LocaleConfig} from "react-native-calendars";
 import formatYMD from "./formatYMD";
 import formatYMDWithOffset from "./formatYMD";
+import {generateMarkedDates} from "./markedDates";
+import * as events from "node:events";
 
 interface Props {
     companyId: string;
     start_date: string;
     end_date:   string;
     amount:    string;
+    memory: string[];
+    setMemory: (memory: (prevMemory) => any[]) => void;
+    eventos: Evento[];
+    setEventos: (evento: (prevEventos) => any[]) => void;
+    setAccumulatedMarkedDates: (markedDates: (prevAccumulated) => any[]) => void;
 }
 
 export interface Evento {
@@ -27,31 +34,51 @@ interface ApiResponse {
     events: Evento[];
 }
 
-export function useEventos({ companyId, start_date, end_date, amount }: Props) {
+export function useEventos({ companyId, start_date, end_date, amount, memory, setMemory, eventos, setEventos, setAccumulatedMarkedDates }: Props) {
     const { authState } = useAuth();
-    const [eventos, setEventos] = useState<Evento[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-
     useEffect(() => {
+        const alreadyFetched = memory.includes(start_date);
+
+        if (alreadyFetched) {
+            setLoading(false);
+            return;
+        }
+
+        console.log("📡 Fetching events…", start_date, end_date);
+
         setLoading(true);
         setError(null);
-        console.log("📡 Fetching events…", start_date, end_date);
+
         axios.get<ApiResponse>(`${API_URL}/events`, {
             params: {
                 company_id: companyId,
-                start_date: start_date,
-                end_date: end_date,
-                amount: amount,
+                start_date,
+                end_date,
+                amount,
             },
             headers: { Authorization: `Bearer ${authState.token}` },
         })
-            .then(({ data }) => setEventos(data.events))
+            .then(({ data }) => {
+                setEventos(prevEventos => {
+                    const eventosExistentes = new Set(prevEventos.map(evt => evt.id));
+                    const nuevosEventos = data.events.filter(evt => !eventosExistentes.has(evt.id));
+                    return [...prevEventos, ...nuevosEventos];
+                });
+
+                setAccumulatedMarkedDates(prevAccumulated => {
+                    const newMarked = generateMarkedDates(data.events);
+                    return { ...prevAccumulated, ...newMarked };
+                });
+
+                setMemory(prevMemory => [...prevMemory, start_date]);
+            })
+
             .catch(err => setError(err.message || 'Error cargando eventos'))
             .finally(() => setLoading(false));
     }, [companyId, start_date, end_date, amount, authState.token]);
 
-    console.log(eventos)
-    return { eventos, loading, error };
+    return { loading, error };
 }

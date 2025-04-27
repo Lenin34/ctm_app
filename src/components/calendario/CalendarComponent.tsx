@@ -9,12 +9,10 @@ import formatYMDWithOffset from "../../hooks/formatYMD";
 
 type DateRange = { start: string; end: string };
 
-export default function CalendarComponent({markedDates, setCalendarDaySelected, setCalendarIdSelected, setStartDate, setEndDate, setDataRange}: {
+export default function CalendarComponent({markedDates, setCalendarDaySelected, setCalendarIdSelected, setDataRange}: {
     markedDates: Record<string, { dots: Array<{ key: string; color: string; selectedDotColor?: string; id: string }> }>;
     setCalendarDaySelected: (date: string) => void;
     setCalendarIdSelected: (date: string[]) => void;
-    setStartDate: (date: string) => void;
-    setEndDate: (date: string) => void;
     setDataRange: (range: DateRange) => void;
 }) {
 
