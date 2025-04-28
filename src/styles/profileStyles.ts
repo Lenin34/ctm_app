@@ -113,4 +113,23 @@ export const profileStyle = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    headerContainer: {
+        alignItems: 'center',
+        marginBottom: mvs(20),
+    },
+    avatarCircle: {
+        width: scale(90),
+        height: scale(90),
+        borderRadius: ms(45),
+        backgroundColor: '#ccc',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: mvs(10),
+        overflow: 'hidden',
+    },
+    avatarImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: ms(45),
+    },
 });

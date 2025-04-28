@@ -17,6 +17,8 @@ import ChangePassword from '../screens/ChangePassword';
 import BeneficiariosScreen from "../screens/BeneficiariosScreen";
 import NuevoBeneficiarioScreen from "../screens/NewBeneficiary";
 import CredencialScreen from "../screens/CredencialScreen";
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
@@ -36,6 +38,7 @@ export default function AppNavigator() {
                         <>
                             <Stack.Screen name="Login" component={Login} />
                             <Stack.Screen name="Register" component={Register} />
+                            <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }}/>
                             <Stack.Screen name="Validate" component={Validate} />
                             <Stack.Screen name="Success" component={Success} />
                             <Stack.Screen name="AvisoPrivacidad" component={AvisoPrivacidad} />

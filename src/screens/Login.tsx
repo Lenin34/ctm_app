@@ -122,9 +122,10 @@ export default function Login({navigation}: any) {
                             <Text style={styles.loginText}>INGRESAR</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
                             <Text style={styles.link}>Olvidé mi contraseña</Text>
                         </TouchableOpacity>
+
 
                         <View style={{
                             flexDirection: 'row',

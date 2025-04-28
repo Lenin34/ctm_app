@@ -8,7 +8,6 @@ import {
     StyleProp,
     ViewStyle,
     SafeAreaView,
-    StatusBar,
     Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -24,24 +23,7 @@ type Props = {
 export default function BaseScreen({ children, scroll = true, style }: Props) {
     const { width } = Dimensions.get('window');
 
-    const renderContent = () => {
-        if (scroll) {
-            return (
-                <ScrollView
-                    keyboardShouldPersistTaps="handled"
-                    contentContainerStyle={[styles.contentContainer, style]}
-                >
-                    {children}
-                </ScrollView>
-            );
-        }
-
-        return (
-            <View style={[styles.contentContainer, style]}>
-                {children}
-            </View>
-        );
-    };
+    const Content = scroll ? ScrollView : View;
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#0B3F61' }}>
@@ -60,7 +42,12 @@ export default function BaseScreen({ children, scroll = true, style }: Props) {
                 style={{ flex: 1 }}
             >
                 <View style={styles.wrapper}>
-                    {renderContent()}
+                    <Content
+                        keyboardShouldPersistTaps="handled"
+                        contentContainerStyle={[styles.contentContainer, style]}
+                    >
+                        {children}
+                    </Content>
                 </View>
             </KeyboardAvoidingView>
         </SafeAreaView>
