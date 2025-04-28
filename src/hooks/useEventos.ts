@@ -10,6 +10,7 @@ import * as events from "node:events";
 
 interface Props {
     companyId: string;
+    token: string;
     start_date: string;
     end_date:   string;
     amount:    string;
@@ -34,8 +35,7 @@ interface ApiResponse {
     events: Evento[];
 }
 
-export function useEventos({ companyId, start_date, end_date, amount, memory, setMemory, eventos, setEventos, setAccumulatedMarkedDates }: Props) {
-    const { authState } = useAuth();
+export function useEventos({ companyId, token, start_date, end_date, amount, memory, setMemory, eventos, setEventos, setAccumulatedMarkedDates }: Props) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -59,7 +59,7 @@ export function useEventos({ companyId, start_date, end_date, amount, memory, se
                 end_date,
                 amount,
             },
-            headers: { Authorization: `Bearer ${authState.token}` },
+            headers: { Authorization: `Bearer ${token}` },
         })
             .then(({ data }) => {
                 setEventos(prevEventos => {
@@ -78,7 +78,7 @@ export function useEventos({ companyId, start_date, end_date, amount, memory, se
 
             .catch(err => setError(err.message || 'Error cargando eventos'))
             .finally(() => setLoading(false));
-    }, [companyId, start_date, end_date, amount, authState.token]);
+    }, [companyId, start_date, end_date, amount, token]);
 
     return { loading, error };
 }

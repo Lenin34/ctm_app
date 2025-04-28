@@ -1,4 +1,4 @@
-import {Animated, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Animated, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import {mvs, vs} from "react-native-size-matters";
 import React, {useEffect, useRef} from "react";
@@ -11,10 +11,10 @@ import * as Animatable from "react-native-animatable";
 import WhatsApp from "../components/svg/WhatsApp";
 
 export default function BenefitDetails() {
-    const route = useRoute<RouteProp<RootStackParamList, 'BenefitDetails'>>();
+    const route = useRoute<RouteProp<RootStackParamList, 'BenefitScreen'>>();
     const {descuento} = route.params;
     if (!descuento) return null;
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'Home'>>();
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'BenefitScreen'>>();
     const scrollRef = useRef<ScrollView>(null);
     const scaleAnim = useRef(new Animated.Value(1)).current;
 
@@ -52,16 +52,16 @@ export default function BenefitDetails() {
         <BaseScreen>
             <Header/>
             <Animatable.View animation="fadeInUp" duration={800} delay={200} style={styles.container}>
-                <View style={styles.img}>
-                    <Text>{descuento.image}</Text>
-                </View>
+
+                <Image source={{uri: descuento.image}} style={styles.img} />
+
                 <View>
-                    <Text style={styles.title}>{descuento.titulo}</Text>
-                    <Text style={styles.vigencia}> Vigencia hasta {descuento.vigencia}</Text>
+                    <Text style={styles.title}>{descuento.title}</Text>
+                    <Text style={styles.vigencia}> Vigencia hasta {descuento.validity_end_date}</Text>
                 </View>
                 <ScrollView style={styles.condicionesContainer}>
                     <Text style={styles.condicionesHeader}>Condiciones</Text>
-                    <Text style={styles.condicionesBody}>{descuento.condiciones}</Text>
+                    <Text style={styles.condicionesBody}>{descuento.description}</Text>
                 </ScrollView>
                 <View>
                     <TouchableOpacity style={styles.solicitar}>
@@ -71,7 +71,7 @@ export default function BenefitDetails() {
                 </View>
                 <View>
                     <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
-                        <Ionicons name="reload" size={mvs(25, 0.5)} color="#fff"/>
+                        <Ionicons name="reload" size={mvs(18, 0.5)} color="#fff"/>
                         <Text style={styles.buttonText}>Regresar</Text>
                     </TouchableOpacity>
                 </View>
@@ -95,9 +95,9 @@ const styles = StyleSheet.create({
             justifyContent: "space-evenly",
         },
         img: {
-            width: vs(130),
-            height: vs(130),
-            backgroundColor: 'green',
+            width: vs(150),
+            height: vs(150),
+            objectFit: 'fill',
             position: 'absolute',
             zIndex: 2,
             top: -vs(40),
@@ -138,7 +138,8 @@ const styles = StyleSheet.create({
             textAlign: "justify"
         },
         button: {
-            flexDirection: "row"
+            flexDirection: "row",
+            alignItems: "center"
         },
         buttonText: {
             fontSize: vs(14),
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
             backgroundColor: '#02AF14',
             flexDirection: "row",
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'space-evenly',
             paddingVertical: vs(8),
             width: vs(200),
             borderRadius: 20,
@@ -161,8 +162,8 @@ const styles = StyleSheet.create({
         },
     solicitarText: {
             fontSize: vs(10),
-        width: '60%',
         textAlign: "center",
+        width: '50%',
         color: '#FFF',
         fontWeight: '900'
     }

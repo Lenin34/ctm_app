@@ -11,10 +11,23 @@ import Register from '../screens/Register';
 import Validate from '../screens/ValidateCode';
 import Success from '../screens/Success';
 import BottomTabs from './BottomTabs';
-import BeneficiariosScreen from '../screens/BenefitDetails';
+import BenefitScreen from '../screens/BenefitDetails';
 import AvisoPrivacidad from '../screens/AvisoPrivacidad';
 import ChangePassword from '../screens/ChangePassword';
 import Beneficiarios from '../screens/BeneficiariosScreen';
+
+interface Benefit {
+    id: string;
+    title: string;
+    description: string;
+    validity_start_date: string;
+    validity_end_date: string;
+    image: string;
+}
+
+export type RootStackParamList = {
+    BenefitScreen: {descuento: Benefit}
+}
 
 const Stack = createNativeStackNavigator();
 
@@ -42,7 +55,7 @@ export default function AppNavigator() {
                     ) : (
                         <>
                             <Stack.Screen name="Main" component={BottomTabs} />
-                            <Stack.Screen name="BeneficiariosScreen" component={BeneficiariosScreen} />
+                            <Stack.Screen name="BenefitScreen" component={BenefitScreen} />
                             <Stack.Screen name="Benefits" component={Beneficiarios}/>
                             <Stack.Screen name="AvisoPrivacidad" component={AvisoPrivacidad} />
                             <Stack.Screen name="ChangePassword" component={ChangePassword} />

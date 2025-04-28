@@ -3,7 +3,8 @@ import {
     ActivityIndicator,
     Animated,
     ScrollView,
-    View
+    View,
+    Text
 } from 'react-native';
 import BaseScreen from "../components/BaseScreen";
 import Header from "../components/Header";
@@ -16,6 +17,7 @@ import TodayEvent from "../components/calendario/TodayEvent";
 import findEvents from "../hooks/findEvents";
 import {useEventos} from "../hooks/useEventos";
 import formatYMDWithOffset from "../hooks/formatYMD";
+import {useAuth} from "../context/AuthContext";
 
 interface Evento {
     id: string;
@@ -34,6 +36,7 @@ export default function Calendar({navigation}) {
     const [calendarIdSelected, setCalendarIdSelected] = useState<string[]>([''])
     const [numeroEventos, setNumeroeventos] = useState(0);
     const today = new Date();
+    const { authState } = useAuth();
 
     //variables para control de fetch
     const [memory, setMemory] = useState<string[]>(['']);
@@ -58,7 +61,8 @@ export default function Calendar({navigation}) {
     };
 
     const { loading, error } = useEventos({
-        companyId: '1',
+        companyId: authState?.user?.company_id,
+        token: authState?.token,
         start_date: dateRange.start,
         end_date:   dateRange.end,
         amount:    '100',
@@ -76,8 +80,7 @@ export default function Calendar({navigation}) {
     }))
 
     useEffect(() => {
-        setNumeroeventos(eventos.length);
-        //setModalSuccessVisible(true);
+        if (memory.length === 1) setModalSuccessVisible(true);
     }, [eventos]);
 
 
@@ -135,15 +138,23 @@ export default function Calendar({navigation}) {
                 />
 
                 {!loading ? (
-                    <View>
+                    <>
+                        {!error ? (
+                            <View>
 
-                        <TodayEvent eventos={calendarDaySelectedJson}/>
+                                <TodayEvent eventos={calendarDaySelectedJson}/>
 
-                        <EventList numeroEventos={numeroEventos} eventos={eventos}/>
+                                <EventList numeroEventos={eventos.length} eventos={eventos}/>
 
-                        <NewEventModal visible={modalSuccessVisible} setVisible={setModalSuccessVisible} eventos={numeroEventos}/>
+                                <NewEventModal visible={modalSuccessVisible} setVisible={setModalSuccessVisible} eventos={eventos.length}/>
 
-                    </View>
+                            </View>
+                        ) : (
+                            <View>
+                                <Text>Error al cargar eventos</Text>
+                            </View>
+                        )}
+                    </>
                 ) : (
                     <ActivityIndicator size={"large"} color={'#fffff'}/>
                 )}
