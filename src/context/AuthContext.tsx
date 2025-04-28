@@ -1,10 +1,10 @@
-// src/context/AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import { API_URL } from '../constants/config';
 import { getProfile, registerUser } from '../services/authService';
 import type { RegisterPayload } from '../services/authService';
+import jwtDecode from 'jwt-decode';
 
 interface AuthContextProps {
     authState: AuthState;
@@ -13,7 +13,6 @@ interface AuthContextProps {
     register: (payload: RegisterPayload) => Promise<any>;
     logout: () => Promise<void>;
 }
-
 
 interface AuthState {
     token: string | null;
@@ -26,7 +25,8 @@ interface AuthState {
         company_id: any;
         employee_number: any;
         curp: string;
-        id: number } | null;
+        id: number;
+    } | null;
     authenticated: boolean;
     loading: boolean;
 }
@@ -38,6 +38,12 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export const useAuth = () => useContext(AuthContext);
 
+// 👇 Tipo para el payload del JWT
+interface JwtPayload {
+    exp: number;
+    [key: string]: any;
+}
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [authState, setAuthState] = useState<AuthState>({
         token: null,
@@ -45,7 +51,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         authenticated: false,
         loading: true,
     });
-
 
     useEffect(() => {
         const loadAuth = async () => {
@@ -56,6 +61,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 console.log('🔐 Cargando sesión almacenada:', { token, userRaw });
 
                 if (token && userRaw) {
+
+                    const decoded = jwtDecode<JwtPayload>(token);
+                    const currentTime = Date.now() / 1000;
+
+                    if (decoded.exp < currentTime) {
+                        console.warn('⚠️ Token expirado. Cerrando sesión automáticamente.');
+                        await logout();
+                        return;
+                    }
+
                     const user = JSON.parse(userRaw);
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                     setAuthState({
@@ -77,7 +92,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     const login = async (email: string, password: string) => {
-
         try {
             console.log('🔐 Iniciando login...');
             const { data } = await axios.post(`${API_URL}/login`, { email, password });

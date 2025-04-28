@@ -13,9 +13,22 @@ type Props = {
     date: string;
     apiEvents: Evento[];
 }
-export default function findEvents({ids, date, apiEvents }: Props): Evento[] {
-    let events: Evento[] = apiEvents.filter( evt => ids.includes(evt.id))
+export default function findEvents({ ids, date, apiEvents }: Props): Evento[] {
+    const cleanDate = date.split(' ')[0]; // 👈 limpia por si date tiene hora
 
-    return events.length > 0 ? events : [{ id: '', start_date: date, description: 'NO HAY EVENTOS DISPONIBLES', title: '', end_date: date, image: '' }];
+    const events: Evento[] = apiEvents
+        .filter(evt => ids.includes(evt.id))
+        .map((item: Evento) => {
+            if (item.end_date.split(' ')[0] === cleanDate) { // 👈 compara limpio
+                return { ...item, start_date: item.end_date };
+            }
+            return item;
+        });
+
+    return events.length > 0
+        ? events
+        : [{ id: '', start_date: cleanDate, description: 'NO HAY EVENTOS DISPONIBLES', title: '', end_date: cleanDate, image: '' }];
 }
+
+
 

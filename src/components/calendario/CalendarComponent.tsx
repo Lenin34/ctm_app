@@ -18,14 +18,15 @@ export default function CalendarComponent({markedDates, setCalendarDaySelected, 
 
     const today = new Date();
 
+    const [selectedDate, setSelectedDate] = useState<string>('');
+
     const [visibleMonth, setVisibleMonth] = useState<{ month: number; year: number }>({
         month: new Date().getMonth() + 1,
         year:  new Date().getFullYear()
     });
     const onDayPress = (day: DateData) => {
         const date = day.dateString;
-        console.log('fecha seleccionada', date)
-        // Aquí “atrapas” tus dots para ese día
+        setSelectedDate(date);
         const dayDots = markedDates[date]?.dots ?? [];
         if (dayDots.length === 0) {
             setCalendarDaySelected(date);
@@ -61,17 +62,18 @@ export default function CalendarComponent({markedDates, setCalendarDaySelected, 
             )}
 
             onPressArrowLeft={(subtractMonth) => {
-                subtractMonth();    // sin esto, el mes no cambiará
+                subtractMonth();
+                setSelectedDate('')
             }}
 
             // Cuando pulsan la flecha derecha:
             onPressArrowRight={(addMonth) => {
-                addMonth();         // sin esto, el mes no cambiará
+                addMonth();
+                setSelectedDate('')
             }}
 
             // Este callback te da el mes y año activo después de cambiar:
             onMonthChange={(date: DateData) => {
-                console.log('Mes cambiado →', date.month, date.year);
                 setVisibleMonth({ month: date.month, year: date.year });
                 const firstOfMonth = new Date(date.year, date.month - 1, 1);
                 setDataRange({start: formatYMDWithOffset(firstOfMonth, 0, true), end:formatYMDWithOffset(firstOfMonth, 0, false)})
@@ -112,7 +114,16 @@ export default function CalendarComponent({markedDates, setCalendarDaySelected, 
             hideArrows={false}
             disableAllTouchEventsForDisabledDays
             markingType="multi-dot"
-            markedDates={markedDates}
+            markedDates={{
+                ...markedDates,
+                ...(selectedDate && {
+                    [selectedDate]: {
+                        ...(markedDates[selectedDate] || {}),
+                        selected: true,
+                        selectedColor: '#0B3F61',
+                    },
+                }),
+            }}
             monthFormat="MMMM"
 
             style={{
@@ -120,7 +131,7 @@ export default function CalendarComponent({markedDates, setCalendarDaySelected, 
                 alignSelf: 'center',
                 borderRadius: 30,
                 backgroundColor: 'rgba(209,209,209,0.5)',
-                marginTop: vs(10),
+                marginTop: vs(20),
                 paddingVertical: vs(10),
             }}
 
@@ -135,21 +146,3 @@ export default function CalendarComponent({markedDates, setCalendarDaySelected, 
         />
     );
 }
-
-const styles = StyleSheet.create({
-    headerText: {
-        fontSize: vs(18),
-        fontWeight: 'bold',
-        color: 'white',
-        paddingVertical: vs(10),
-        textAlign: 'center',
-    },
-    headerUnderline: {
-        height: 3,
-        backgroundColor: 'white',
-        width: '150%',
-        alignSelf: 'center',
-        borderRadius: 30,
-        zIndex: 10,
-    },
-});

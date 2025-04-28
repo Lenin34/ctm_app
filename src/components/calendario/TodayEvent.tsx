@@ -1,5 +1,8 @@
 import {StyleSheet, Text, View} from "react-native";
 import {vs} from "react-native-size-matters";
+import {backgroundColor} from "react-native-calendars/src/style";
+import {Ionicons} from "@expo/vector-icons";
+import COLORS from "../../constants/colors";
 
 
 interface Evento {
@@ -15,31 +18,38 @@ type Props = {
     eventos: Evento[]
 }
 export default function TodayEvent({eventos}: Props){
+
     return(
         <View style={styles.container}>
-            <View style={styles.header}>
-                {eventos[0].description === 'NO HAY EVENTOS DISPONIBLES' ? (
-                    <Text style={styles.headerText}>{eventos[0].start_date}</Text>
-                ) : (
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={styles.dot}/>
+
+
+            {eventos[0].description === 'NO HAY EVENTOS DISPONIBLES' ? (
+                <>
+                    <View style={styles.header}>
                         <Text style={styles.headerText}>{eventos[0].start_date}</Text>
                     </View>
-                )}
-
-            </View>
-            <View style={styles.separator}/>
-            <View style={styles.details}>
-                {eventos.length > 1 ? (
-                    <>
+                    <View style={styles.separator}/>
+                    <View style={[styles.details, {alignItems: 'center'}]}>
+                        <Text style={styles.detailsText}>{eventos[0].description}</Text>
+                    </View>
+                </>
+            ) : (
+                <>
+                    <View style={styles.header}>
+                        <Text style={styles.headerText}>{eventos[0].start_date.slice(0,10)}</Text>
+                    </View>
+                    <View style={styles.separator}/>
+                    <View style={styles.details}>
                         {eventos.map((item: Evento) => (
-                            <Text key={item.id} style={[styles.detailsText, {}]}>{`\u2022 ${item.description.toUpperCase()}`}</Text>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Ionicons name={'ellipse'} size={vs(13)} color={COLORS[parseInt(item.id, 10) % COLORS.length]}/>
+                                <Text key={item.id} style={[styles.detailsText, {}]}>{item.description.toUpperCase()} {item.start_date.slice(11,16)} HRS.</Text>
+                            </View>
                         ))}
-                    </>
-                ) : (
-                    <Text style={styles.detailsText}>{eventos[0].description}</Text>
-                )}
-            </View>
+                    </View>
+                </>
+            )}
+
         </View>
     )
 }
@@ -63,27 +73,20 @@ const styles = StyleSheet.create({
         fontWeight: "bold"
     },
     details: {
-        alignItems: "center",
-        marginVertical: vs(20)
+        alignItems: "flex-start",
+        margin: vs(20)
     },
     detailsText: {
         fontSize: vs(14),
         color: '#FFF',
-
+        marginLeft: vs(3)
     },
     separator: {
-        height: 3,
+        height: 2,
         borderRadius: 3,
         backgroundColor: '#FFF',
         width: '80%',
         alignSelf: "center",
 
-    },
-    dot: {
-        backgroundColor: '#292468',
-        height: vs(16),
-        width: vs(16),
-        marginRight: vs(8),
-        borderRadius: '50%',
     },
 });

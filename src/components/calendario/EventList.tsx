@@ -21,6 +21,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LocaleConfig } from 'react-native-calendars';
 import RotableChevronDown from './RotableChevronDown';
+import COLORS from "../../constants/colors";
+import {Ionicons} from "@expo/vector-icons";
 
 interface Evento {
     id: string;
@@ -71,10 +73,12 @@ const EventList = ({ numeroEventos, eventos }: Props) => {
     };
 
     const convertirFecha = (fecha: string): string => {
-        const [anio, mes, dia] = fecha.split('-');
+        const soloFecha = fecha.split(' ')[0];
+        const [anio, mes, dia] = soloFecha.split('-');
         const nombreMes = locale.monthNames[Number(mes) - 1];
-        return `${dia} DE ${nombreMes} DE ${anio}`;
+        return `${dia} DE ${nombreMes} DE ${anio} ${fecha.slice(11,16)} hrs.`;
     };
+
 
     return (
         <Animated.View style={styles.container}>
@@ -114,7 +118,7 @@ const EventList = ({ numeroEventos, eventos }: Props) => {
                         <View key={String(evento.id)} style={styles.eventItem}>
                             <Text style={styles.eventDetails}>{evento.description}</Text>
                             <View style={styles.dateContainer}>
-                                <View style={styles.eventDot} />
+                                <Ionicons name={'ellipse'} size={vs(13)} color={COLORS[parseInt(evento.id, 10) % COLORS.length]}/>
                                 <Text style={styles.eventDate}>
                                     {convertirFecha(evento.start_date)}
                                 </Text>
