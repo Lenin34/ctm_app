@@ -11,10 +11,12 @@ import Register from '../screens/Register';
 import Validate from '../screens/ValidateCode';
 import Success from '../screens/Success';
 import BottomTabs from './BottomTabs';
-import BenefitScreen from '../screens/BenefitDetails';
 import AvisoPrivacidad from '../screens/AvisoPrivacidad';
 import ChangePassword from '../screens/ChangePassword';
-import Beneficiarios from '../screens/BeneficiariosScreen';
+import BenefitDetails from '../screens/BenefitDetails';
+import BeneficiariosScreen from "../screens/BeneficiariosScreen";
+import NuevoBeneficiarioScreen from "../screens/NewBeneficiary";
+import CredencialScreen from "../screens/CredencialScreen";
 
 interface Benefit {
     id: string;
@@ -29,12 +31,6 @@ export type RootStackParamList = {
     BenefitScreen: {descuento: Benefit}
 }
 
-import BenefitDetails from '../screens/BenefitDetails';
-import AvisoPrivacidad from '../screens/AvisoPrivacidad';
-import ChangePassword from '../screens/ChangePassword';
-import BeneficiariosScreen from "../screens/BeneficiariosScreen";
-import NuevoBeneficiarioScreen from "../screens/NewBeneficiary";
-import CredencialScreen from "../screens/CredencialScreen";
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
