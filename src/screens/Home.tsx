@@ -80,8 +80,7 @@ export default function Home({ navigation }: any) {
 
     const {loadingBenefits, errorBenefits} = useBenefits({
         companyId: authState?.user?.company_id,
-        amount: 6,
-        start: 0,
+        page: 1,
         token: authState?.token,
         setBenefits,
     })

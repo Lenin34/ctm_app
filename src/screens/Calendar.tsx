@@ -34,12 +34,11 @@ export default function Calendar({navigation}) {
     const [modalSuccessVisible, setModalSuccessVisible] = useState(false);
     const [calendarDaySelected, setCalendarDaysSelected] = useState<string>(new Date().toISOString().split('T')[0]);
     const [calendarIdSelected, setCalendarIdSelected] = useState<string[]>([''])
-    const [numeroEventos, setNumeroeventos] = useState(0);
     const today = new Date();
     const { authState } = useAuth();
 
     //variables para control de fetch
-    const [memory, setMemory] = useState<string[]>(['']);
+    const [memory, setMemory] = useState<string[]>([]);
     const [accumulatedMarkedDates, setAccumulatedMarkedDates] = useState<{
         [p: string]: { dots: { key: string; color: string; selectedDotColor?: string; id: string }[] }
     }>({})
@@ -80,7 +79,7 @@ export default function Calendar({navigation}) {
     }))
 
     useEffect(() => {
-        if (memory.length === 1) setModalSuccessVisible(true);
+        if (memory.length === 0) setModalSuccessVisible(true);
     }, [eventos]);
 
 

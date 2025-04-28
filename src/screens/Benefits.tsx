@@ -22,17 +22,16 @@ export default function Benefits({navigation}: any) {
     const scaleAnim = useRef(new Animated.Value(1)).current;
     const { authState } = useAuth();
     const [benefits, setBenefits] = useState<Benefit[]>([])
-    const [amount, setAmount] = useState<number>(9);
-    const [start, setStart] = useState(0)
-    const [firstTime, setFirstTime] = useState(true)
+    const [page, setPage] = useState(1)
+    const [pagination, setPagination] = useState<boolean>(true);
 
     const {loadingBenefits, errorBenefits} = useBenefits({
         companyId: authState?.user?.company_id,
-        amount: amount,
-        start: start,
+        page: page,
         token: authState?.token,
         setBenefits,
-        setAmount,
+        setPagination,
+
     })
 
     useEffect(() => {
@@ -72,14 +71,7 @@ export default function Benefits({navigation}: any) {
     };
 
     const handleStart = () => {
-        let prevStart = start;
-        setStart(prevStart + amount)
-        if (firstTime){
-            setFirstTime(false)
-            setAmount(3)
-        }
-        console.log(amount, start)
-
+        setPage(page + 1);
     }
 
     return (
@@ -93,11 +85,13 @@ export default function Benefits({navigation}: any) {
                         {!errorBenefits ? (
                             <>
                                 <Descuentos descuentos={benefits}/>
-                                <View>
-                                    <TouchableOpacity style={styles.button} onPress={handleStart}>
-                                        <Text style={styles.buttonText}>Ver más</Text>
-                                    </TouchableOpacity>
-                                </View>
+                                {pagination && (
+                                    <View>
+                                        <TouchableOpacity style={styles.button} onPress={handleStart}>
+                                            <Text style={styles.buttonText}>Ver más</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
                             </>
                         ) : (
                             <View>

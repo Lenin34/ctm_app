@@ -18,45 +18,53 @@ interface Benefit {
 interface ApiResponse {
     code:   number;
     benefits: Benefit[];
+    pagination: {
+        page: number,
+        per_page: number,
+        total_items: number,
+        total_pages: number,
+        has_next_page: boolean,
+        has_previous_page: boolean,
+    }
 }
 
 interface Props {
     companyId: string;
-    amount: number;
-    start: number;
+    page: number;
     token: string;
+    setPagination?: (value: boolean) => void;
     setBenefits: (benefit: (prevBenefits) => any[]) => void;
-    setAmount: (amount: number) => void;
 }
 
-export function useBenefits({companyId, amount, start, token, setBenefits, setAmount}: Props){
+export function useBenefits({companyId, page, token, setBenefits, setPagination,}: Props){
     const [loadingBenefits, setLoading] = useState(true);
     const [errorBenefits, setError] = useState<string | null>(null);
 
     useEffect(() => {
         setLoading(true);
-        console.log("📡 Fetching benefits…", "amount", amount, "start", start);
+        console.log("📡 Fetching benefits…");
 
         axios.get<ApiResponse>(`${API_URL}/benefits`,{
             params: {
                 company_id: companyId,
-                amount,
-                start
+                per_page: 6,
+                page
             },
             headers: { Authorization: `Bearer ${token}` },
         })
             .then(({data}) => {
+
                 setBenefits(prevBenefits => {
                     const beneficiosExistentes = new Set(prevBenefits.map(benefit => benefit.id));
                     const nuevosBenefits = data.benefits.filter(benefit => !beneficiosExistentes.has(benefit.id));
                     return [...prevBenefits, ...nuevosBenefits]
                 });
+
+                if (setPagination) setPagination(data.pagination.has_next_page);
             })
             .catch(err => setError(err.message || "Error cargando beneficios"))
             .finally(() => setLoading(false))
-
-
-    }, [start, amount]);
+    }, [page]);
 
     return {loadingBenefits, errorBenefits};
 

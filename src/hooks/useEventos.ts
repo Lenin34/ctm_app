@@ -18,7 +18,12 @@ interface Props {
     setMemory: (memory: (prevMemory) => any[]) => void;
     eventos: Evento[];
     setEventos: (evento: (prevEventos) => any[]) => void;
-    setAccumulatedMarkedDates: (markedDates: (prevAccumulated) => any[]) => void;
+    setAccumulatedMarkedDates: (markedDates: (prevAccumulated: {
+        [p: string]: { dots: { key: string; color: string; selectedDotColor?: string; id: string }[] }
+    }) => {
+        [p: string]: { dots: { key: string; color: string; selectedDotColor?: string; id: string }[] }
+    }) => void;
+
 }
 
 export interface Evento {
@@ -30,18 +35,31 @@ export interface Evento {
     image:      string;
 }
 
+interface Error {
+    "code": "EC-003",
+    "message": "No se encontraron eventos en el rango de fechas especificado.",
+    "details": {
+    "company_id": 1,
+        "start_date": "2025-06-01",
+        "end_date": "2025-06-30"
+    }
+}
+
 interface ApiResponse {
-    code:   number;
-    events: Evento[];
+    code?:   number;
+    events?: Evento[];
+    error?: Error;
 }
 
 export function useEventos({ companyId, token, start_date, end_date, amount, memory, setMemory, eventos, setEventos, setAccumulatedMarkedDates }: Props) {
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<Error | null>(null);
+    const [code, setCode] = useState<number | null>(null);
 
     useEffect(() => {
         const alreadyFetched = memory.includes(start_date);
 
+        setError(null);
         if (alreadyFetched) {
             setLoading(false);
             return;
@@ -50,7 +68,7 @@ export function useEventos({ companyId, token, start_date, end_date, amount, mem
         console.log("📡 Fetching events…", start_date, end_date);
 
         setLoading(true);
-        setError(null);
+
 
         axios.get<ApiResponse>(`${API_URL}/events`, {
             params: {
@@ -74,11 +92,12 @@ export function useEventos({ companyId, token, start_date, end_date, amount, mem
                 });
 
                 setMemory(prevMemory => [...prevMemory, start_date]);
+
             })
 
-            .catch(err => setError(err.message || 'Error cargando eventos'))
+            .catch(err => setError(err.message.data.message || 'Error cargando eventos'))
             .finally(() => setLoading(false));
     }, [companyId, start_date, end_date, amount, token]);
 
-    return { loading, error };
+    return { loading, error, code };
 }
