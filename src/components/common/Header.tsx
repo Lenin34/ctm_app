@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, TouchableOpacity, Alert, StyleSheet} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
-import LogoSN from './svg/LogoSN';
+import LogoSN from '../svg/LogoSN';
 import {mvs, vs} from 'react-native-size-matters';
-import {useAuth} from '../context/AuthContext';
+import {useAuth} from '../../context/AuthContext';
 
 
 interface HeaderProps {

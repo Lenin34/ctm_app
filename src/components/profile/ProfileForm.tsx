@@ -37,6 +37,15 @@ export default function ProfileForm({ formData, isEditing, setFormData }: Props)
         }
     };
 
+    const handleTextChange = (key: keyof FormData, text: string) => {
+        const shouldUppercase = ['nombre', 'apellidoPaterno', 'apellidoMaterno'].includes(key);
+        const processedText = shouldUppercase ? text.toUpperCase() : text;
+        setFormData((prev) => ({
+            ...prev,
+            [key]: processedText,
+        }));
+    };
+
     return (
         <>
             {Object.entries(formData).map(([key, value], index) => {
@@ -58,7 +67,7 @@ export default function ProfileForm({ formData, isEditing, setFormData }: Props)
                                 <DateTimePicker
                                     value={value ? new Date(value) : new Date()}
                                     mode="date"
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                    display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
                                     onChange={handleDateChange}
                                     maximumDate={new Date()}
                                 />
@@ -75,12 +84,8 @@ export default function ProfileForm({ formData, isEditing, setFormData }: Props)
                                 <TextInput
                                     style={styles.inputText}
                                     value={value ?? ''}
-                                    onChangeText={(text) =>
-                                        setFormData((prev) => ({
-                                            ...prev,
-                                            [key as keyof FormData]: text,
-                                        }))
-                                    }
+                                    onChangeText={(text) => handleTextChange(key as keyof FormData, text)}
+                                    autoCapitalize="characters"
                                 />
                             ) : (
                                 <Text style={styles.inputText}>{value}</Text>

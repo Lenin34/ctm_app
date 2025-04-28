@@ -7,7 +7,7 @@ import {
     Text
 } from 'react-native';
 import BaseScreen from "../components/BaseScreen";
-import Header from "../components/Header";
+import Header from "../components/common/Header";
 import * as Animatable from "react-native-animatable";
 import NewEventModal from "../components/calendario/NewEventModal";
 import CalendarComponent from "../components/calendario/CalendarComponent";

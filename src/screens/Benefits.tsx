@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Animated, ScrollView, Text, TouchableOpacity, View, StyleSheet, ActivityIndicator} from 'react-native';
 import BaseScreen from "../components/BaseScreen";
-import Header from "../components/Header";
+import Header from "../components/common/Header";
 import Descuentos from "../components/benefits/Descuentos";
 import {vs} from "react-native-size-matters";
 import * as Animatable from 'react-native-animatable';

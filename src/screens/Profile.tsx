@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import BaseScreen from '../components/BaseScreen';
-import Header from '../components/Header';
+import Header from '../components/common/Header';
 import { profileStyle as styles } from '../styles/profileStyles';
 import { getProfile, updateProfile } from '../services/profileService';
 import { useAuth } from '../context/AuthContext';
@@ -146,7 +146,7 @@ export default function Profile({ navigation }: any) {
                     onSaveProfile={handleSaveProfile}
                     onChangePassword={() => navigation.navigate('ChangePassword')}
                     onViewBeneficiaries={() => navigation.navigate('BeneficiariosScreen')}
-                    onViewCredential={() => navigation.navigate('Credencial')}
+                    onViewCredential={() => navigation.navigate('CredencialScreen')}
                 />
             </View>
         </BaseScreen>

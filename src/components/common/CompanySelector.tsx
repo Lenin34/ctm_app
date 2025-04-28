@@ -8,7 +8,7 @@ import {
     TextStyle,
     ViewStyle,
 } from 'react-native';
-import { registerStyles as styles } from '../styles/registerStyles';
+import { registerStyles as styles } from '../../styles/registerStyles';
 
 const companies = [
     'GRUPO TORRES',
