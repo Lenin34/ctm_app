@@ -1,26 +1,50 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Calendar, DateData, LocaleConfig } from 'react-native-calendars';
 import { vs } from 'react-native-size-matters';
 import { AntDesign } from '@expo/vector-icons';
-import { View, Text, StyleSheet } from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import '../../constants/localeCalendar';
+import formatYMD from "../../hooks/formatYMD";
+import formatYMDWithOffset from "../../hooks/formatYMD";
 
-export default function CalendarComponent({ markedDates, setCalendarDaySelected }) {
+type DateRange = { start: string; end: string };
+
+export default function CalendarComponent({markedDates, setCalendarDaySelected, setCalendarIdSelected, setDataRange}: {
+    markedDates: Record<string, { dots: Array<{ key: string; color: string; selectedDotColor?: string; id: string }> }>;
+    setCalendarDaySelected: (date: string) => void;
+    setCalendarIdSelected: (date: string[]) => void;
+    setDataRange: (range: DateRange) => void;
+}) {
+
     const today = new Date();
-    const min   = new Date(today.getFullYear(), today.getMonth(), 1);
-    //const max   = new Date(today.getFullYear(), today.getMonth() + 2, 1);
 
-    const formatYMD = (d: Date) => {
-        const mm = String(d.getMonth() + 1).padStart(2, '0');
-        const dd = String(d.getDate()).padStart(2, '0');
-        return `${d.getFullYear()}-${mm}-${dd}`;
+    const [selectedDate, setSelectedDate] = useState<string>('');
+
+    const [visibleMonth, setVisibleMonth] = useState<{ month: number; year: number }>({
+        month: new Date().getMonth() + 1,
+        year:  new Date().getFullYear()
+    });
+    const onDayPress = (day: DateData) => {
+        const date = day.dateString;
+        setSelectedDate(date);
+        const dayDots = markedDates[date]?.dots ?? [];
+        if (dayDots.length === 0) {
+            setCalendarDaySelected(date);
+            setCalendarIdSelected(['']);
+        }
+
+        // Extraes los IDs
+        const ids = dayDots.map(d => d.id);
+        setCalendarDaySelected(date);
+        setCalendarIdSelected(ids);
+
     };
+
+    const min   = new Date(today.getFullYear(), today.getMonth(), 1);
+
 
     const locale = LocaleConfig.locales[LocaleConfig.defaultLocale];
 
-    const onDayPress = (day: DateData) => {
-        setCalendarDaySelected(day.dateString);
-    };
 
     return (
         <Calendar
@@ -28,13 +52,32 @@ export default function CalendarComponent({ markedDates, setCalendarDaySelected 
 
             // Flechas
             renderArrow={(direction) => (
-                <AntDesign
-                    name={direction === 'left' ? 'left' : 'right'}
-                    size={20}
-                    color="white"
 
-                />
+                    <AntDesign
+                        name={direction === 'left' ? 'left' : 'right'}
+                        size={20}
+                        color="white"
+
+                    />
             )}
+
+            onPressArrowLeft={(subtractMonth) => {
+                subtractMonth();
+                setSelectedDate('')
+            }}
+
+            // Cuando pulsan la flecha derecha:
+            onPressArrowRight={(addMonth) => {
+                addMonth();
+                setSelectedDate('')
+            }}
+
+            // Este callback te da el mes y año activo después de cambiar:
+            onMonthChange={(date: DateData) => {
+                setVisibleMonth({ month: date.month, year: date.year });
+                const firstOfMonth = new Date(date.year, date.month - 1, 1);
+                setDataRange({start: formatYMDWithOffset(firstOfMonth, 0, true), end:formatYMDWithOffset(firstOfMonth, 0, false)})
+            }}
 
             // Header con año dinámico
             renderHeader={(date) => {
@@ -64,14 +107,23 @@ export default function CalendarComponent({ markedDates, setCalendarDaySelected 
             }}
 
             // Rango de fechas dinámico
-            minDate={formatYMD(min)}
+            minDate={formatYMDWithOffset(min, 0, true)}
             //maxDate={formatYMD(max)}
 
             hideExtraDays
             hideArrows={false}
             disableAllTouchEventsForDisabledDays
-            markingType="custom"
-            markedDates={markedDates}
+            markingType="multi-dot"
+            markedDates={{
+                ...markedDates,
+                ...(selectedDate && {
+                    [selectedDate]: {
+                        ...(markedDates[selectedDate] || {}),
+                        selected: true,
+                        selectedColor: '#0B3F61',
+                    },
+                }),
+            }}
             monthFormat="MMMM"
 
             style={{
@@ -79,7 +131,7 @@ export default function CalendarComponent({ markedDates, setCalendarDaySelected 
                 alignSelf: 'center',
                 borderRadius: 30,
                 backgroundColor: 'rgba(209,209,209,0.5)',
-                marginTop: vs(10),
+                marginTop: vs(20),
                 paddingVertical: vs(10),
             }}
 
@@ -87,27 +139,10 @@ export default function CalendarComponent({ markedDates, setCalendarDaySelected 
                 calendarBackground: 'transparent',
                 textSectionTitleColor: '#FFF',
                 dayTextColor: '#FFF',
+                todayTextColor: '#0B3F61',
                 textDayFontWeight: 'bold',
                 textDayHeaderFontWeight: 'bold',
             }}
         />
     );
 }
-
-const styles = StyleSheet.create({
-    headerText: {
-        fontSize: vs(18),
-        fontWeight: 'bold',
-        color: 'white',
-        paddingVertical: vs(10),
-        textAlign: 'center',
-    },
-    headerUnderline: {
-        height: 3,
-        backgroundColor: 'white',
-        width: '150%',
-        alignSelf: 'center',
-        borderRadius: 30,
-        zIndex: 10,
-    },
-});

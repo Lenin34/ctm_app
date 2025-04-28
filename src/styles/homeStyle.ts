@@ -50,7 +50,7 @@ export const homeStyles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 3,
-        elevation: 5,
+        elevation: 8,
     },
     cardOverlay: {
         paddingVertical: vs(3),
@@ -72,6 +72,7 @@ export const homeStyles = StyleSheet.create({
         width: imgGrid,
         borderRadius: 8,
         overflow: 'hidden',
+
     },
     colapsableContainer: {
         width: '100%',

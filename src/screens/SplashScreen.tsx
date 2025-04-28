@@ -25,7 +25,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
                 duration={2000}
                 style={styles.logoContainer}
             >
-                <LogoSN/>
+                <LogoSN size={"lg"}/>
             </Animatable.View>
         </View>
     );

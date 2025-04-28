@@ -7,20 +7,21 @@ import {RootStackParamList} from "../../navigation/AppNavigator";
 
 
 
-interface Descuento{
-    idDescuento: string;
+interface Benefit {
+    id: string;
+    title: string;
+    description: string;
+    validity_start_date: string;
+    validity_end_date: string;
     image: string;
-    titulo: string;
-    vigencia: string;
-    condiciones: string;
 }
 
 export default function Descuentos({descuentos}){
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'Home'>>();
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'BenefitScreen'>>();
 
-    const handleModal = (item: Descuento) => {
+    const handleModal = (item: Benefit) => {
 
-        navigation.navigate('BenefitDetails', {descuento: item})
+        navigation.navigate('BenefitScreen', {descuento: item})
     }
 
     return(
@@ -28,10 +29,10 @@ export default function Descuentos({descuentos}){
             {descuentos.map((item, idx) => (
                 <View key={idx} style={styles.gridItem}>
                     <TouchableOpacity onPress={() => handleModal(item)}>
-                        <Image source={item.image} style={styles.cardImage} resizeMode="cover" />
+                        <Image source={{uri: item.image}} style={styles.cardImage} resizeMode="cover" />
                     </TouchableOpacity>
                     <View style={styles.cardOverlay}>
-                        <Text style={styles.cardText}>{item.titulo}</Text>
+                        <Text style={styles.cardText}>{item.title}</Text>
                     </View>
                 </View>
             ))}

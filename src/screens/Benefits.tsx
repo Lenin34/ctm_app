@@ -1,54 +1,38 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Animated, ScrollView, Text, View} from 'react-native';
+import {Animated, ScrollView, Text, TouchableOpacity, View, StyleSheet, ActivityIndicator} from 'react-native';
 import BaseScreen from "../components/BaseScreen";
 import Header from "../components/common/Header";
 import Descuentos from "../components/benefits/Descuentos";
 import {vs} from "react-native-size-matters";
 import * as Animatable from 'react-native-animatable';
+import {useAuth} from "../context/AuthContext";
+import {useBenefits} from "../hooks/useBenefits";
 
-interface Descuento{
-    idDescuento: string;
+interface Benefit {
+    id: string;
+    title: string;
+    description: string;
+    validity_start_date: string;
+    validity_end_date: string;
     image: string;
-    titulo: string;
-    vigencia: string;
-    condiciones: string;
 }
-
-
-const descuentos: Descuento[] = [
-    {
-        idDescuento: '1',
-        image: '../../assets/images/1.jpg',
-        titulo: 'Descuento A',
-        vigencia: '2025-04-16',
-        condiciones: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'
-    },
-    {
-        idDescuento: '1',
-        image: '../../assets/images/1.jpg',
-        titulo: 'Descuento A',
-        vigencia: '2025-04-16',
-        condiciones: 'lorem impsuim'
-    },
-    {
-        idDescuento: '1',
-        image: '../../assets/images/1.jpg',
-        titulo: 'Descuento A',
-        vigencia: '2025-04-16',
-        condiciones: 'lorem impsuim'
-    },
-    {
-        idDescuento: '1',
-        image: '../../assets/images/1.jpg',
-        titulo: 'Descuento A',
-        vigencia: '2025-04-16',
-        condiciones: 'lorem impsuim'
-    },
-];
 
 export default function Benefits({navigation}: any) {
     const scrollRef = useRef<ScrollView>(null);
     const scaleAnim = useRef(new Animated.Value(1)).current;
+    const { authState } = useAuth();
+    const [benefits, setBenefits] = useState<Benefit[]>([])
+    const [page, setPage] = useState(1)
+    const [pagination, setPagination] = useState<boolean>(true);
+
+    const {loadingBenefits, errorBenefits} = useBenefits({
+        companyId: authState?.user?.company_id,
+        page: page,
+        token: authState?.token,
+        setBenefits,
+        setPagination,
+
+    })
 
     useEffect(() => {
         // auto-scroll posts
@@ -86,12 +70,55 @@ export default function Benefits({navigation}: any) {
         });
     };
 
+    const handleStart = () => {
+        setPage(page + 1);
+    }
+
     return (
         <BaseScreen>
             <Header onLogout={handleLogout}/>
             <Animatable.View animation="fadeInUp" duration={800} delay={200} style={{marginTop: vs(50)}}>
-                <Descuentos descuentos={descuentos}/>
+
+
+                {!loadingBenefits ? (
+                    <>
+                        {!errorBenefits ? (
+                            <>
+                                <Descuentos descuentos={benefits}/>
+                                {pagination && (
+                                    <View>
+                                        <TouchableOpacity style={styles.button} onPress={handleStart}>
+                                            <Text style={styles.buttonText}>Ver más</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
+                            </>
+                        ) : (
+                            <View>
+                                <Text>Error al cargar beneficios</Text>
+                            </View>
+                        )}
+                    </>
+                ) : (
+                    <ActivityIndicator size={"large"} color={'#fffff'}/>
+                )}
             </Animatable.View>
         </BaseScreen>
     );
 }
+
+const styles = StyleSheet.create({
+    button: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: vs(5),
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: vs(14),
+        fontWeight: 'bold',
+        marginRight: vs(3),
+        textDecorationLine: 'underline',
+    },
+})

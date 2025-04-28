@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { scale, vs, moderateScale, moderateVerticalScale } from 'react-native-size-matters';
+import {scale, vs, moderateScale, moderateVerticalScale, mvs} from 'react-native-size-matters';
 
 const { width, height } = Dimensions.get('window');
 
@@ -60,21 +60,21 @@ export const loginStyles = StyleSheet.create({
     },
     link: {
         color: '#ccc',
-        fontSize: vs(11),
+        fontSize: mvs(11,0.5),
         textAlign: 'center',
         marginTop: vs(15),
         textDecorationLine: 'underline',
     },
     registerText: {
         color: '#eee',
-        fontSize: vs(11),
+        fontSize: mvs(11,0.6),
         textAlign: 'center',
     },
     registerLink: {
         color: '#D5FFD9',
         fontWeight: 'bold',
         textDecorationLine: 'underline',
-        fontSize: vs(11),
+        fontSize: mvs(11,0.6),
     },
     errorText: {
         color: '#ff4d4d',
