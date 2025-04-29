@@ -11,15 +11,29 @@ import Register from '../screens/Register';
 import Validate from '../screens/ValidateCodeScreen';
 import Success from '../screens/Success';
 import BottomTabs from './BottomTabs';
-import BenefitDetails from '../screens/BenefitDetails';
 import AvisoPrivacidad from '../screens/AvisoPrivacidad';
 import ChangePassword from '../screens/ChangePassword';
+import BenefitDetails from '../screens/BenefitDetails';
 import BeneficiariosScreen from "../screens/BeneficiariosScreen";
 import NuevoBeneficiarioScreen from "../screens/NewBeneficiary";
 import CredencialScreen from "../screens/CredencialScreen";
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import NewPasswordScreen from '../screens/NewPasswordScreen';
 import ValidateCodeScreen from '../screens/ValidateCodeScreen';
+
+
+interface Benefit {
+    id: string;
+    title: string;
+    description: string;
+    validity_start_date: string;
+    validity_end_date: string;
+    image: string;
+}
+
+export type RootStackParamList = {
+    BenefitScreen: {descuento: Benefit}
+}
 
 const Stack = createNativeStackNavigator();
 

@@ -1,32 +1,56 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Animated, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+    ActivityIndicator,
+    Animated,
+    ScrollView,
+    View,
+    Text
+} from 'react-native';
 import BaseScreen from "../components/BaseScreen";
 import Header from "../components/common/Header";
 import * as Animatable from "react-native-animatable";
-import {homeStyles as styles} from "../styles/homeStyle";
 import NewEventModal from "../components/calendario/NewEventModal";
 import CalendarComponent from "../components/calendario/CalendarComponent";
 import EventList from "../components/calendario/EventList";
-import EventRow from "../components/calendario/EventRow";
 import {generateMarkedDates} from "../hooks/markedDates";
 import TodayEvent from "../components/calendario/TodayEvent";
 import findEvents from "../hooks/findEvents";
+import {useEventos} from "../hooks/useEventos";
+import formatYMDWithOffset from "../hooks/formatYMD";
+import {useAuth} from "../context/AuthContext";
 
 interface Evento {
-    idEvento: string;
-    date: string;
-    details: string;
+    id: string;
+    description: string;
+    end_date: string;
+    start_date: string;
+    image: string;
+    title: string;
 }
 
 export default function Calendar({navigation}) {
     const scrollRef = useRef<ScrollView>(null);
     const scaleAnim = useRef(new Animated.Value(1)).current;
     const [modalSuccessVisible, setModalSuccessVisible] = useState(false);
-    const [calendarDaySelected, setCalendarDaySelected] = useState<string>(new Date().toISOString().split('T')[0]);
-    const [numeroEventos, setNumeroeventos] = useState(0)
+    const [calendarDaySelected, setCalendarDaysSelected] = useState<string>(new Date().toISOString().split('T')[0]);
+    const [calendarIdSelected, setCalendarIdSelected] = useState<string[]>([''])
+    const today = new Date();
+    const { authState } = useAuth();
+
+    //variables para control de fetch
+    const [memory, setMemory] = useState<string[]>([]);
+    const [accumulatedMarkedDates, setAccumulatedMarkedDates] = useState<{
+        [p: string]: { dots: { key: string; color: string; selectedDotColor?: string; id: string }[] }
+    }>({})
+    const [eventos, setEventos] = useState<Evento[]>([]);
 
 
 
+// en Calendar.tsx
+    const [dateRange, setDateRange] = useState({
+        start: formatYMDWithOffset(today, 0, true),
+        end:   formatYMDWithOffset(today, 0, false),
+    });
 
     const handleLogout = () => {
         navigation.reset({
@@ -35,37 +59,38 @@ export default function Calendar({navigation}) {
         });
     };
 
-    const eventosApi = [
-        { idEvento: '1', date:'2025-04-16', details: 'duplicado 1' },
-        { idEvento: '2', date:'2025-04-06', details: 'duplicado 2' },
-        { idEvento: '3', date:'2025-05-09', details: '9 de mayo' },
-        { idEvento: '4', date:'2025-04-11', details: '11 de abril' },
-        { idEvento: '5', date:'2026-04-13', details: '13 de abril 2026' },
-        { idEvento: '6', date:'2025-9-18', details: '18 de octubre' },
-        { idEvento: '7', date:'2025-12-18', details: '18 de diciembre' },
-    ];
+    const { loading, error } = useEventos({
+        companyId: authState?.user?.company_id,
+        token: authState?.token,
+        start_date: dateRange.start,
+        end_date:   dateRange.end,
+        amount:    '100',
+        memory: memory,
+        setMemory,
+        eventos: eventos,
+        setEventos,
+        setAccumulatedMarkedDates,
+    });
 
     const [calendarDaySelectedJson, setCalendarDaySelectedJson]= useState<Evento[]>(findEvents({
+        ids: calendarIdSelected,
         date: calendarDaySelected,
-        apiEvents: eventosApi,
+        apiEvents: eventos,
     }))
 
-
-    const markedDates = generateMarkedDates(eventosApi);
-
     useEffect(() => {
-        setNumeroeventos(eventosApi.length)
-        setModalSuccessVisible(true)
-    }, []);
+        if (memory.length === 0) setModalSuccessVisible(true);
+    }, [eventos]);
+
 
     useEffect(() => {
         const calendarDaySelectedJson: Evento[] = findEvents({
+            ids: calendarIdSelected,
             date: calendarDaySelected,
-            apiEvents: eventosApi,
+            apiEvents: eventos,
         });
+
         setCalendarDaySelectedJson(calendarDaySelectedJson)
-        console.log('dia atrapado',calendarDaySelected)
-        console.log('dia desde screen calendar', calendarDaySelectedJson)
     }, [calendarDaySelected]);
 
 
@@ -98,24 +123,40 @@ export default function Calendar({navigation}) {
         ).start();
     }, []);
 
-
-
     return (
         <BaseScreen>
             <Header onLogout={handleLogout} />
 
             <Animatable.View animation="fadeInUp" duration={800} delay={200}>
-                <View>
 
-                    <CalendarComponent markedDates={markedDates} setCalendarDaySelected={setCalendarDaySelected}/>
+                <CalendarComponent
+                    markedDates={accumulatedMarkedDates}
+                    setCalendarDaySelected={setCalendarDaysSelected}
+                    setCalendarIdSelected={setCalendarIdSelected}
+                    setDataRange={setDateRange}
+                />
 
-                    <TodayEvent eventos={calendarDaySelectedJson}/>
+                {!loading ? (
+                    <>
+                        {!error ? (
+                            <View>
 
-                    <EventList numeroEventos={numeroEventos} eventos={eventosApi}/>
+                                <TodayEvent eventos={calendarDaySelectedJson}/>
 
-                    <NewEventModal visible={modalSuccessVisible} setVisible={setModalSuccessVisible} eventos={numeroEventos}/>
+                                <EventList numeroEventos={eventos.length} eventos={eventos}/>
 
-                </View>
+                                <NewEventModal visible={modalSuccessVisible} setVisible={setModalSuccessVisible} eventos={eventos.length}/>
+
+                            </View>
+                        ) : (
+                            <View>
+                                <Text>Error al cargar eventos</Text>
+                            </View>
+                        )}
+                    </>
+                ) : (
+                    <ActivityIndicator size={"large"} color={'#fffff'}/>
+                )}
             </Animatable.View>
         </BaseScreen>
     );

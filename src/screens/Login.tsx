@@ -30,7 +30,6 @@ export default function Login({navigation}: any) {
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState<ValidationErrors>({});
     const {validateLogin} = useValidation();
-    const {width, height} = Dimensions.get('window');
     const {login} = useAuth();
 
     const handleLogin = async () => {
@@ -57,7 +56,7 @@ export default function Login({navigation}: any) {
                     style={StyleSheet.absoluteFillObject}
                 />
                 <View style={{position: 'absolute', bottom: 0}}>
-                    <FondoAzul width={width}/>
+                    <FondoAzul/>
                 </View>
             </View>
 
@@ -71,6 +70,7 @@ export default function Login({navigation}: any) {
                     <ScrollView
                         contentContainerStyle={styles.scrollContainer}
                         keyboardShouldPersistTaps="handled"
+
                     >
                         <LogoSN size="md"/>
 
@@ -139,7 +139,7 @@ export default function Login({navigation}: any) {
                             </TouchableOpacity>
                         </View>
 
-                        <View style={{alignSelf: 'center', bottom: 0, position: 'absolute', marginBottom: mvs(30)}}>
+                        <View style={{alignSelf: 'center', marginTop: mvs(140,0.8)}}>
                             <TouchableOpacity onPress={() => navigation.navigate('AvisoPrivacidad')}>
                                 <Text style={styles.link}>Aviso de privacidad</Text>
                             </TouchableOpacity>

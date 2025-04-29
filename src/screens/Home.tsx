@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Text, View, ScrollView, Image, Animated } from 'react-native';
+import {Text, View, ScrollView, Image, Animated, ActivityIndicator} from 'react-native';
 import BaseScreen from '../components/BaseScreen';
 import Header from '../components/common/Header';
 import { homeStyles as styles } from '../styles/homeStyle';
@@ -7,6 +7,8 @@ import * as Animatable from 'react-native-animatable';
 import Carusel from "../components/Carusel";
 import {vs} from "react-native-size-matters";
 import Descuentos from "../components/benefits/Descuentos";
+import {useBenefits} from "../hooks/useBenefits";
+import {useAuth} from "../context/AuthContext";
 
 const posts = [
     require('../../assets/images/1.jpg'),
@@ -21,6 +23,15 @@ interface Descuento{
     titulo: string;
     vigencia: string;
     condiciones: string;
+}
+
+interface Benefit {
+    id: string;
+    title: string;
+    description: string;
+    validity_start_date: string;
+    validity_end_date: string;
+    image: string;
 }
 
 const descuentos: Descuento[] = [
@@ -64,6 +75,16 @@ const descuentos: Descuento[] = [
 export default function Home({ navigation }: any) {
     const scrollRef = useRef<ScrollView>(null);
     const scaleAnim = useRef(new Animated.Value(1)).current;
+    const { authState } = useAuth();
+    const [benefits, setBenefits] = useState<Benefit[]>([])
+
+    const {loadingBenefits, errorBenefits} = useBenefits({
+        companyId: authState?.user?.company_id,
+        page: 1,
+        token: authState?.token,
+        setBenefits,
+    })
+
 
     useEffect(() => {
         // auto-scroll posts
@@ -117,15 +138,27 @@ export default function Home({ navigation }: any) {
                         />
                     </Animatable.View>
 
-                    {/* DESCUENTOS */}
-                    <Animatable.View animation="fadeInUp" delay={700}>
-                        <Text style={[styles.sectionTitle, { marginBottom: vs(6) }]}>
-                            ¡APROVECHA NUESTROS DESCUENTOS AQUÍ!
-                        </Text>
-                        <Descuentos descuentos={descuentos}/>
-                    </Animatable.View>
-
-
+                    {!loadingBenefits ? (
+                        <>
+                            {!errorBenefits ? (
+                                <>
+                                    {/* BENEFITS */}
+                                    <Animatable.View animation="fadeInUp" delay={700}>
+                                        <Text style={[styles.sectionTitle, { marginBottom: vs(6) }]}>
+                                            ¡APROVECHA NUESTROS DESCUENTOS AQUÍ!
+                                        </Text>
+                                        <Descuentos descuentos={benefits}/>
+                                    </Animatable.View>
+                                </>
+                            ) : (
+                                <View>
+                                    <Text>Error al cargar beneficios</Text>
+                                </View>
+                            )}
+                        </>
+                    ) : (
+                        <ActivityIndicator size={"large"} color={'#fffff'}/>
+                    )}
 
                 </ScrollView>
             </Animatable.View>
