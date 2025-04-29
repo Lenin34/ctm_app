@@ -20,8 +20,8 @@ import FondoAzul from "../components/svg/fondoAzul";
 import {mvs, vs} from 'react-native-size-matters';
 import LogoSN from "../components/svg/LogoSN";
 import AvisoPrivacidad from "./AvisoPrivacidad";
-import { useAuth } from '../context/AuthContext';
-import { Alert } from 'react-native';
+import {useAuth} from '../context/AuthContext';
+import {Alert} from 'react-native';
 
 
 export default function Login({navigation}: any) {
@@ -30,10 +30,11 @@ export default function Login({navigation}: any) {
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState<ValidationErrors>({});
     const {validateLogin} = useValidation();
+    const {width, height} = Dimensions.get('window');
     const {login} = useAuth();
 
     const handleLogin = async () => {
-        const validationErrors = validateLogin({ email, password });
+        const validationErrors = validateLogin({email, password});
         setErrors(validationErrors);
 
         if (Object.keys(validationErrors).length === 0) {
@@ -56,7 +57,7 @@ export default function Login({navigation}: any) {
                     style={StyleSheet.absoluteFillObject}
                 />
                 <View style={{position: 'absolute', bottom: 0}}>
-                    <FondoAzul/>
+                    <FondoAzul width={width}/>
                 </View>
             </View>
 
@@ -70,7 +71,6 @@ export default function Login({navigation}: any) {
                     <ScrollView
                         contentContainerStyle={styles.scrollContainer}
                         keyboardShouldPersistTaps="handled"
-
                     >
                         <LogoSN size="md"/>
 
@@ -122,10 +122,9 @@ export default function Login({navigation}: any) {
                             <Text style={styles.loginText}>INGRESAR</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+                        <TouchableOpacity>
                             <Text style={styles.link}>Olvidé mi contraseña</Text>
                         </TouchableOpacity>
-
 
                         <View style={{
                             flexDirection: 'row',
@@ -139,9 +138,9 @@ export default function Login({navigation}: any) {
                             </TouchableOpacity>
                         </View>
 
-                        <View style={{alignSelf: 'center', marginTop: mvs(140,0.8)}}>
+                        <View style={{alignSelf: 'center', bottom: 0, position: 'absolute', marginBottom: mvs(30)}}>
                             <TouchableOpacity onPress={() => navigation.navigate('AvisoPrivacidad')}>
-                                <Text style={styles.link}>Aviso de privacidad</Text>
+                                <Text style={styles.link1}>Aviso de privacidad</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>

@@ -41,7 +41,11 @@ export async function loginUser(email: string, password: string) {
  */
 export const registerUser = async (payload: RegisterPayload) => {
     try {
-        const { data } = await axios.post(`${API_URL}/register`, payload);
+        const { data } = await axios.post(`${API_URL}/register`, payload, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
         return { success: true, user_id: data.user_id };
     } catch (error: any) {
         console.error('❌ Error al registrar:', error.response?.data || error.message);
