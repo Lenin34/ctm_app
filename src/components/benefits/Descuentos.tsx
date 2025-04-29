@@ -17,11 +17,11 @@ interface Benefit {
 }
 
 export default function Descuentos({descuentos}){
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'BenefitScreen'>>();
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'BenefitDetails'>>();
 
     const handleModal = (item: Benefit) => {
 
-        navigation.navigate('BenefitScreen', {descuento: item})
+        navigation.navigate('BenefitDetails', {descuento: item})
     }
 
     return(

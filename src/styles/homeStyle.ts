@@ -23,18 +23,13 @@ export const homeStyles = StyleSheet.create({
         shadowRadius: 4.5,
         elevation: 6,
     },
-    mainBanner: {
-        alignSelf: 'center',
+    bannerWrapper: {
         width: '90%',
-        height: vs(175),
-        borderRadius: 16,
-        marginBottom: 20,
-        backgroundColor: '#fff',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 5,
-        elevation: 7,
+        aspectRatio: 16 / 9,
+        borderRadius: 12,
+        overflow: 'hidden',
+        backgroundColor: 'red',
+        objectFit: "cover"
     },
     card: {
         marginRight: 15,
@@ -78,5 +73,22 @@ export const homeStyles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'rgba(209,209,209,0.5)',
         paddingHorizontal: vs(8)
+    },
+    imageInfo: {
+        position: 'absolute',
+        zIndex: 2,
+        bottom: vs(30),
+        left: vs(25)
+    },
+    infoTitle: {
+        color: 'white',
+        textTransform: 'uppercase',
+        fontSize: vs(18),
+        fontWeight: '900'
+    },
+    infoDate: {
+        color: 'white',
+        textTransform: "uppercase",
+        fontSize: vs(10)
     }
 });

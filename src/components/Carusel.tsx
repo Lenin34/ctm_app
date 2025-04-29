@@ -1,23 +1,31 @@
 import React from 'react';
-import { Dimensions, View, Image, StyleSheet } from 'react-native';
+import {Dimensions, View, Image, StyleSheet} from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import { useSharedValue } from 'react-native-reanimated';
+import {useSharedValue} from 'react-native-reanimated';
 import {vs} from "react-native-size-matters";
 
-const { width } = Dimensions.get('window');
-const carouselHeight = vs(150);
-const imageWidth = vs(250);
-const imageHeight = vs(150);
+const {width} = Dimensions.get('window');
+const carouselHeight = vs(100);
+const imageWidth = vs(100);
+const imageHeight = vs(100);
 
-// Array de imágenes para el carrusel
-const posts = [
-    require('../../assets/images/1.jpg'),
-    require('../../assets/images/1.jpg'),
-    require('../../assets/images/1.jpg'),
-    require('../../assets/images/1.jpg'),
-];
+interface Post {
+    "id": number,
+    "title": string,
+    "description": string,
+    "image": string,
+    "url": string,
+    "platform": string,
+    "start_date": string,
+    "end_date": string,
+}
 
-const PostCarousel: React.FC = () => {
+interface Props {
+    posts: Post[];
+}
+
+
+const PostCarousel: React.FC = ({posts}: Props) => {
     const progress = useSharedValue<number>(0);
 
     return (
@@ -31,15 +39,15 @@ const PostCarousel: React.FC = () => {
                 autoPlayInterval={3000}
                 mode="parallax"
                 modeConfig={{
-                    parallaxScrollingScale: 0.9,
-                    parallaxScrollingOffset: 120,
+                    parallaxScrollingScale: 0.95,
+                    parallaxScrollingOffset: 260,
                 }}
                 onProgressChange={(_, absoluteProgress) => {
                     progress.value = absoluteProgress;
                 }}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                     <View style={styles.itemContainer}>
-                        <Image source={item} style={styles.image} resizeMode="cover" />
+                        <Image source={{uri: item.image}} style={styles.image} resizeMode="cover"/>
                     </View>
                 )}
             />

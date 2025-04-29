@@ -28,7 +28,7 @@ interface Benefit {
 }
 
 export type RootStackParamList = {
-    BenefitScreen: {descuento: Benefit}
+    BenefitDetails: {descuento: Benefit}
 }
 
 const Stack = createNativeStackNavigator();
