@@ -6,6 +6,7 @@ import { profileStyle as styles } from '../styles/profileStyles';
 import { getProfile, updateProfile } from '../services/profileService';
 import { useAuth } from '../context/AuthContext';
 import * as SecureStore from 'expo-secure-store';
+import ProfilePicture from '../components/profile/ProfilePicture';
 
 import ProfileHeader from '../components/profile/ProfileHeader';
 import ProfileForm from '../components/profile/ProfileForm';
@@ -145,17 +146,6 @@ export default function Profile({ navigation }: any) {
         formData.append('employee_number', payload.employee_number || '');
         formData.append('company_id', payload.company_id || '');
 
-        if (payload.photo && !payload.photo.startsWith('http')) {
-            const uriParts = payload.photo.split('.');
-            const fileType = uriParts[uriParts.length - 1];
-
-            formData.append('photo', {
-                uri: payload.photo,
-                name: `photo.${fileType}`,
-                type: `image/${fileType}`,
-            } as any);
-        }
-
         return formData;
     };
 
@@ -164,15 +154,17 @@ export default function Profile({ navigation }: any) {
         <BaseScreen scroll>
             <Header onLogout={handleLogout} />
             <View style={styles.profileBox}>
-                <ProfileHeader photo={formData.photo} onPickPhoto={() => setShowPhotoModal(true)} />
-
-
+                <ProfilePicture
+                    photoUri={formData.photo}
+                    onPressChangePhoto={() => setShowPhotoModal(true)}
+                />
 
                 <ProfileForm
                     formData={formData}
                     isEditing={isEditing}
                     setFormData={setFormData}
                 />
+
                 <ProfileActions
                     isEditing={isEditing}
                     onEditToggle={() => setIsEditing(true)}
@@ -190,7 +182,7 @@ export default function Profile({ navigation }: any) {
                     setFormData((prev) => ({ ...prev, photo: uri }));
                 }}
             />
-
         </BaseScreen>
+
     );
 }

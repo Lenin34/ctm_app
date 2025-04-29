@@ -11,7 +11,7 @@ type Props = {
     center?: boolean;
 };
 
-export default function Title({ text, size = 'lg', color = '#001f2e', center = true }: Props) {
+export default function Title({ text, size = 'lg', color = '#ffffff', center = true }: Props) {
     const fontSize = size === 'sm' ? ms(16) : size === 'md' ? ms(20) : ms(24);
 
     const style: TextStyle = {

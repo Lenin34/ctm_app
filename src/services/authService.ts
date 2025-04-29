@@ -102,3 +102,48 @@ export async function loginWithGoogle(idToken: string, platform: string) {
         return { error: true, msg: 'Error con Google Login' };
     }
 }
+
+/**
+ * Reenviar código de verificación por teléfono.
+ */
+export const resendVerificationCode = async (userId: number) => {
+    try {
+        const { data } = await axios.post(`${API_URL}/users/${userId}/phone-verification/resend`);
+        return { success: true, data };
+    } catch (error: any) {
+        console.error('❌ Error en resendVerificationCode:', error.response?.data || error.message);
+        return { error: true, msg: 'No se pudo reenviar el código' };
+    }
+};
+
+/**
+ * Validar el código de verificación enviado por teléfono.
+ */
+export const validateVerificationCode = async (userId: number, verificationCode: string) => {
+    try {
+        const { data } = await axios.patch(`${API_URL}/users/${userId}/phone-verification`, {
+            verification_code: verificationCode,
+        });
+        return { success: true, data };
+    } catch (error: any) {
+        console.error('❌ Error en validateVerificationCode:', error.response?.data || error.message);
+        return { error: true, msg: 'Código incorrecto o expirado' };
+    }
+};
+
+/**
+ * Cambiar la contraseña del usuario.
+ */
+export const changePassword = async (userId: number, newPassword: string) => {
+    try {
+        const { data } = await axios.patch(`${API_URL}/users/${userId}/reset-password`, {
+            current_password: '', // No se requiere el actual para recuperación
+            new_password: newPassword,
+        });
+        return { success: true, data };
+    } catch (error: any) {
+        console.error('❌ Error en changePassword:', error.response?.data || error.message);
+        return { error: true, msg: 'No se pudo cambiar la contraseña' };
+    }
+};
+

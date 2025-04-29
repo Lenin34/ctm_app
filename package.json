@@ -29,6 +29,7 @@
     "react-native": "0.76.9",
     "react-native-animatable": "^1.4.0",
     "react-native-calendars": "^1.1311.0",
+    "react-native-confetti-cannon": "^1.5.2",
     "react-native-flash-message": "^0.4.2",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-modal-datetime-picker": "^18.0.0",
@@ -44,7 +45,7 @@
   },
   "private": true,
   "devDependencies": {
-    "typescript": "^5.3.3",
-    "@types/react": "~18.3.12"
+    "@types/react": "~18.3.12",
+    "typescript": "^5.3.3"
   }
 }

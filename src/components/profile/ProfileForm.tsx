@@ -10,6 +10,7 @@ type FormData = {
     telefono: string;
     correo: string;
     birthday?: string | null;
+    photo?: string | null;
 };
 
 type Props = {
@@ -29,7 +30,7 @@ const formatDate = (dateString: string | null) => {
 export default function ProfileForm({ formData, isEditing, setFormData }: Props) {
     const [showDatePicker, setShowDatePicker] = useState(false);
 
-    const handleDateChange = (event: any, selectedDate?: Date) => {
+    const handleDateChange = (_event: any, selectedDate?: Date) => {
         setShowDatePicker(false);
         if (selectedDate) {
             const formattedDate = selectedDate.toISOString().split('T')[0];
@@ -38,8 +39,8 @@ export default function ProfileForm({ formData, isEditing, setFormData }: Props)
     };
 
     const handleTextChange = (key: keyof FormData, text: string) => {
-        const shouldUppercase = ['nombre', 'apellidoPaterno', 'apellidoMaterno'].includes(key);
-        const processedText = shouldUppercase ? text.toUpperCase() : text;
+        const keysToUppercase = ['nombre', 'apellidoPaterno', 'apellidoMaterno'];
+        const processedText = keysToUppercase.includes(key) ? text.toUpperCase() : text;
         setFormData((prev) => ({
             ...prev,
             [key]: processedText,
@@ -48,52 +49,58 @@ export default function ProfileForm({ formData, isEditing, setFormData }: Props)
 
     return (
         <>
-            {Object.entries(formData).map(([key, value], index) => {
-                if (key === 'birthday') {
+            {Object.entries(formData)
+                .filter(([key]) => key !== 'photo')
+                .map(([key, value], index) => {
+                    if (key === 'birthday') {
+                        return (
+                            <View key={index} style={styles.fieldContainer}>
+                                <Text style={styles.label}>FECHA DE NACIMIENTO</Text>
+                                <TouchableOpacity
+                                    style={styles.inputBox}
+                                    onPress={() => isEditing && setShowDatePicker(true)}
+                                    disabled={!isEditing}
+                                >
+                                    <Text style={styles.inputText}>
+                                        {value ? formatDate(value) : 'Selecciona tu fecha'}
+                                    </Text>
+                                </TouchableOpacity>
+
+                                {showDatePicker && (
+                                    <DateTimePicker
+                                        value={value ? new Date(value) : new Date()}
+                                        mode="date"
+                                        display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
+                                        onChange={handleDateChange}
+                                        maximumDate={new Date()}
+                                    />
+                                )}
+                            </View>
+                        );
+                    }
+
                     return (
                         <View key={index} style={styles.fieldContainer}>
-                            <Text style={styles.label}>FECHA DE NACIMIENTO</Text>
-                            <TouchableOpacity
-                                style={styles.inputBox}
-                                onPress={() => isEditing && setShowDatePicker(true)}
-                                disabled={!isEditing}
-                            >
-                                <Text style={styles.inputText}>
-                                    {value ? formatDate(value) : 'Selecciona tu fecha'}
-                                </Text>
-                            </TouchableOpacity>
-
-                            {showDatePicker && (
-                                <DateTimePicker
-                                    value={value ? new Date(value) : new Date()}
-                                    mode="date"
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
-                                    onChange={handleDateChange}
-                                    maximumDate={new Date()}
-                                />
-                            )}
+                            <Text style={styles.label}>
+                                {key
+                                    .replace(/([A-Z])/g, ' $1') // separa palabras mayúsculas
+                                    .replace(/^./, (str) => str.toUpperCase())}
+                            </Text>
+                            <View style={styles.inputBox}>
+                                {isEditing ? (
+                                    <TextInput
+                                        style={styles.inputText}
+                                        value={value ?? ''}
+                                        onChangeText={(text) => handleTextChange(key as keyof FormData, text)}
+                                        autoCapitalize={['nombre', 'apellidoPaterno', 'apellidoMaterno'].includes(key) ? 'characters' : 'none'}
+                                    />
+                                ) : (
+                                    <Text style={styles.inputText}>{value}</Text>
+                                )}
+                            </View>
                         </View>
                     );
-                }
-
-                return (
-                    <View key={index} style={styles.fieldContainer}>
-                        <Text style={styles.label}>{key.replace(/([A-Z])/g, ' $1').toUpperCase()}</Text>
-                        <View style={styles.inputBox}>
-                            {isEditing ? (
-                                <TextInput
-                                    style={styles.inputText}
-                                    value={value ?? ''}
-                                    onChangeText={(text) => handleTextChange(key as keyof FormData, text)}
-                                    autoCapitalize="characters"
-                                />
-                            ) : (
-                                <Text style={styles.inputText}>{value}</Text>
-                            )}
-                        </View>
-                    </View>
-                );
-            })}
+                })}
         </>
     );
 }
