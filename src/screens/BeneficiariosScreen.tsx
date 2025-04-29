@@ -49,17 +49,19 @@ export default function BeneficiariosScreen({navigation}: any) {
 
                 const response = await getBeneficiarios(userId);
 
-                console.log(response.data);
-
                 if (response.error) {
-                    showErrorAlert({error: {code: 'FETCH_BENEFICIARIOS', message: response.msg}});
+                    showErrorAlert({ error: { code: 'FETCH_BENEFICIARIOS', message: response.msg } });
                 } else {
-                    console.log(response.data);
-                    setBeneficiarios(response.data);
-                }
+                    console.log('Respuesta cruda:', response.data);
 
+                    const beneficiariosArray = Object.values(response.data);
+
+                    console.log('Beneficiarios como array:', beneficiariosArray);
+
+                    setBeneficiarios(beneficiariosArray);
+                }
             } catch (error: any) {
-                showErrorAlert({error: {code: 'UNEXPECTED_ERROR', message: error.message}});
+                showErrorAlert({ error: { code: 'UNEXPECTED_ERROR', message: error.message } });
             } finally {
                 setLoading(false);
             }
@@ -67,6 +69,7 @@ export default function BeneficiariosScreen({navigation}: any) {
 
         fetchData();
     }, []);
+
 
     return (
         <BaseScreen scroll={false}>
@@ -90,24 +93,19 @@ export default function BeneficiariosScreen({navigation}: any) {
                                 relacion={item.kinship}
                                 fechaNacimiento={item.birthday}
                                 foto={item.photo}
-                                onEdit={() =>
-                                    navigation.navigate('NuevoBeneficiario', { beneficiario: item })
-                                }
-                                onDelete={() =>
-                                    Alert.alert(
-                                        '¿Eliminar beneficiario?',
-                                        'Esta acción no se puede deshacer.',
-                                        [
-                                            { text: 'Cancelar', style: 'cancel' },
-                                            {
-                                                text: 'Eliminar',
-                                                style: 'destructive',
-                                                onPress: () => handleDelete(item.id),
-                                            },
-                                        ]
-                                    )
-                                }
-                            />
+                                onEdit={() => navigation.navigate('NuevoBeneficiario', {beneficiario: item})}
+                                onDelete={() => Alert.alert(
+                                    '¿Eliminar beneficiario?',
+                                    'Esta acción no se puede deshacer.',
+                                    [
+                                        {text: 'Cancelar', style: 'cancel'},
+                                        {
+                                            text: 'Eliminar',
+                                            style: 'destructive',
+                                            onPress: () => handleDelete(item.id),
+                                        },
+                                    ]
+                                )} kinship={''}                            />
                         )}
                         ListEmptyComponent={
                             <Text style={{ textAlign: 'center', marginTop: 40 }}>

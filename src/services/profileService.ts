@@ -48,17 +48,16 @@ export const getProfile = async (): Promise<ApiResponse> => {
 /**
  * Actualiza el perfil del usuario.
  */
-export const updateProfile = async (userId: number, payload: any): Promise<ApiResponse> => {
+export const updateProfile = async (userId: number, formData: FormData) => {
     try {
-        const { data } = await axios.post(`${API_URL}/users/${userId}/profile`, payload);
-        return {
-            error: false,
-            msg: data.message,
-        };
+        const response = await axios.post(`/users/${userId}/profile`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
     } catch (error: any) {
-        return {
-            error: true,
-            msg: error?.response?.data?.message || 'Error al actualizar perfil',
-        };
+        console.error('Error al actualizar perfil:', error);
+        return { error: true, msg: error.response?.data?.message || 'Error desconocido' };
     }
 };

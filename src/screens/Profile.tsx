@@ -6,6 +6,7 @@ import { profileStyle as styles } from '../styles/profileStyles';
 import { getProfile, updateProfile } from '../services/profileService';
 import { useAuth } from '../context/AuthContext';
 import * as SecureStore from 'expo-secure-store';
+import ProfilePicture from '../components/profile/ProfilePicture';
 
 import ProfileHeader from '../components/profile/ProfileHeader';
 import ProfileForm from '../components/profile/ProfileForm';
@@ -13,9 +14,11 @@ import ProfileActions from '../components/profile/ProfileActions';
 import { showErrorAlert, showApiErrorAlert,showSuccessAlert } from '../utils/alertUtils';
 import ChangePassword from "./ChangePassword";
 import BeneficiariosScreen from "./BeneficiariosScreen";
+import PhotoPickerModal from "../components/common/PhotoPickerModal";
 export default function Profile({ navigation }: any) {
     const { authState, setAuthState } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
+    const [showPhotoModal, setShowPhotoModal] = useState(false);
 
     const [formData, setFormData] = useState({
         nombre: '',
@@ -23,6 +26,7 @@ export default function Profile({ navigation }: any) {
         apellidoMaterno: '',
         telefono: '',
         correo: '',
+        photo: undefined
     });
 
     useEffect(() => {
@@ -66,6 +70,7 @@ export default function Profile({ navigation }: any) {
             email: formData.correo.trim(),
             employee_number: authState.user?.employee_number,
             company_id: authState.user?.company_id,
+            photo: formData.photo,
         };
 
 
@@ -103,6 +108,7 @@ export default function Profile({ navigation }: any) {
 
         await SecureStore.setItemAsync('user', JSON.stringify(refreshedProfile.profile));
 
+        // @ts-ignore
         setAuthState((prev) => ({
             ...prev,
             user: {
@@ -130,16 +136,35 @@ export default function Profile({ navigation }: any) {
         });
     };
 
+    const buildProfileFormData = (payload: any) => {
+        const formData = new FormData();
+
+        formData.append('name', payload.name);
+        formData.append('last_name', payload.last_name);
+        formData.append('phone_number', payload.phone_number);
+        formData.append('email', payload.email);
+        formData.append('employee_number', payload.employee_number || '');
+        formData.append('company_id', payload.company_id || '');
+
+        return formData;
+    };
+
+
     return (
         <BaseScreen scroll>
             <Header onLogout={handleLogout} />
             <View style={styles.profileBox}>
-                <ProfileHeader />
+                <ProfilePicture
+                    photoUri={formData.photo}
+                    onPressChangePhoto={() => setShowPhotoModal(true)}
+                />
+
                 <ProfileForm
                     formData={formData}
                     isEditing={isEditing}
                     setFormData={setFormData}
                 />
+
                 <ProfileActions
                     isEditing={isEditing}
                     onEditToggle={() => setIsEditing(true)}
@@ -149,6 +174,15 @@ export default function Profile({ navigation }: any) {
                     onViewCredential={() => navigation.navigate('CredencialScreen')}
                 />
             </View>
+
+            <PhotoPickerModal
+                visible={showPhotoModal}
+                onClose={() => setShowPhotoModal(false)}
+                onPhotoSelected={(uri) => {
+                    setFormData((prev) => ({ ...prev, photo: uri }));
+                }}
+            />
         </BaseScreen>
+
     );
 }
