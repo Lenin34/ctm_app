@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     contentContainer: {
-        justifyContent: 'center',
         paddingBottom: 80,
         flexGrow: 1,
     },

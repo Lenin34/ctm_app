@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import {Text, View, ScrollView, Image, Animated, ActivityIndicator} from 'react-native';
+import {Text, View, ScrollView, Image, Animated, ActivityIndicator, Dimensions} from 'react-native';
 import BaseScreen from '../components/BaseScreen';
 import Header from '../components/common/Header';
 import { homeStyles as styles } from '../styles/homeStyle';
@@ -9,6 +9,8 @@ import {vs} from "react-native-size-matters";
 import Descuentos from "../components/benefits/Descuentos";
 import {useBenefits} from "../hooks/useBenefits";
 import {useAuth} from "../context/AuthContext";
+import {usePost} from "../hooks/usePost";
+import {formatDateForBanner} from "../hooks/formatDateForBanner";
 
 const posts = [
     require('../../assets/images/1.jpg'),
@@ -17,12 +19,15 @@ const posts = [
     require('../../assets/images/1.jpg'),
 ];
 
-interface Descuento{
-    idDescuento: string;
-    image: string;
-    titulo: string;
-    vigencia: string;
-    condiciones: string;
+interface Post {
+    "id": number,
+    "title": string,
+    "description": string,
+    "image": string,
+    "url": string,
+    "platform": string,
+    "start_date": string,
+    "end_date": string,
 }
 
 interface Benefit {
@@ -34,49 +39,22 @@ interface Benefit {
     image: string;
 }
 
-const descuentos: Descuento[] = [
-    {
-        idDescuento: '1',
-        image: '../../assets/images/1.jpg',
-        titulo: 'Descuento A',
-        vigencia: '2025-04-16',
-        condiciones: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'
-    },
-    {
-        idDescuento: '1',
-        image: '../../assets/images/1.jpg',
-        titulo: 'Descuento B',
-        vigencia: '2025-04-16',
-        condiciones: 'lorem impsuim'
-    },
-    {
-        idDescuento: '1',
-        image: '../../assets/images/1.jpg',
-        titulo: 'Descuento A',
-        vigencia: '2025-04-16',
-        condiciones: 'lorem impsuim'
-    },
-    {
-        idDescuento: '1',
-        image: '../../assets/images/1.jpg',
-        titulo: 'Descuento A',
-        vigencia: '2025-04-16',
-        condiciones: 'lorem impsuim'
-    },
-    {
-        idDescuento: '1',
-        image: '../../assets/images/1.jpg',
-        titulo: 'Descuento A',
-        vigencia: '2025-04-16',
-        condiciones: 'lorem impsuim'
-    },
-];
-
 export default function Home({ navigation }: any) {
+    const { width } = Dimensions.get('window');
     const scrollRef = useRef<ScrollView>(null);
     const scaleAnim = useRef(new Animated.Value(1)).current;
     const { authState } = useAuth();
     const [benefits, setBenefits] = useState<Benefit[]>([])
+    const [post, setPost] = useState<Post[]>([])
+
+    const {loadingPost, errorPost} = usePost({
+        company_id: authState?.user?.company_id,
+        token: authState?.token,
+        start_date: '',
+        end_date: '',
+        amount: 5,
+        setPost
+    })
 
     const {loadingBenefits, errorBenefits} = useBenefits({
         companyId: authState?.user?.company_id,
@@ -115,6 +93,7 @@ export default function Home({ navigation }: any) {
         ).start();
     }, []);
 
+    console.log(post)
 
     return (
         <BaseScreen>
@@ -122,21 +101,50 @@ export default function Home({ navigation }: any) {
 
             <Animatable.View animation="fadeInUp" duration={800} delay={200}>
                 <ScrollView>
-                    {/* POSTS */}
-                    <Animatable.View animation="fadeInUp" delay={300}>
-                        <Text style={styles.sectionTitle}>LO ÚLTIMO EN REDES SOCIALES</Text>
-                        <Carusel/>
-                    </Animatable.View>
 
-                    {/* EVENTO */}
-                    <Animatable.View animation="fadeInUp" delay={500}>
-                        <Text style={[styles.sectionTitle, {marginBottom: vs(6)}]}>¡LO QUE SE VIENE!</Text>
-                        <Animated.Image
-                            source={require('../../assets/images/3.jpg')}
-                            style={[styles.mainBanner, { transform: [{ scale: scaleAnim }] }]}
-                            resizeMode="cover"
-                        />
-                    </Animatable.View>
+                    {!loadingPost ? (
+                        <>
+                            {!errorPost ? (
+                                <>
+                                    {/* POSTS */}
+                                    <Animatable.View animation="fadeInUp" delay={300}>
+                                        <Text style={styles.sectionTitle}>LO ÚLTIMO EN REDES SOCIALES</Text>
+                                        <Carusel posts={post}/>
+                                    </Animatable.View>
+
+                                    {/* EVENTO */}
+                                    <Animatable.View animation="fadeInUp" delay={500} style={{alignSelf: 'center'}}>
+                                        <Text style={styles.sectionTitle}>
+                                            ¡LO QUE SE VIENE!
+                                        </Text>
+
+                                        <Image
+                                            source={{ uri: post[0].image }}
+                                            style={{
+                                                width: width * 0.9,  // 👈 ahora sí
+                                                height: (width * 0.9) * 9 / 16, // 👈 altura proporcional (opcional, para 16:9)
+                                                borderRadius: 10,
+                                            }}
+                                            resizeMode={"cover"}
+                                        />
+
+                                        <View style={styles.imageInfo}>
+                                            <Text style={styles.infoTitle}>{post[0].title}</Text>
+                                            <Text style={styles.infoDate}>{formatDateForBanner(post[0].start_date, post[0].end_date)}</Text>
+                                        </View>
+
+                                    </Animatable.View>
+                                </>
+                            ) : (
+                                <View>
+                                    <Text>Error al cargar post</Text>
+                                </View>
+                            )}
+                        </>
+                    ) : (
+                        <ActivityIndicator size={"large"} color={'#fffff'}/>
+                    )}
+
 
                     {!loadingBenefits ? (
                         <>
