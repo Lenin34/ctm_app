@@ -33,7 +33,7 @@ export function usePost({company_id, token, start_date, end_date, amount, setPos
 
     useEffect(() => {
         setLoading(true)
-
+        console.log("📡 Fetching posts…");
         axios.get<ApiResponse>(`${API_URL}/social-media`, {
             params: {
                 company_id,
@@ -45,6 +45,7 @@ export function usePost({company_id, token, start_date, end_date, amount, setPos
         } )
             .then(({data}) => {
                 setPost(data.social_media)
+                console.log(data)
             })
             .catch(err => setError(err.message || "Error cargando beneficios"))
             .finally(() => setLoading(false))

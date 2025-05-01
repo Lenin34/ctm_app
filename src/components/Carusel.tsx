@@ -1,55 +1,50 @@
-import React from 'react';
-import {Dimensions, View, Image, StyleSheet} from 'react-native';
+import React, { useState } from 'react';
+import { View, Image, Dimensions, StyleSheet } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import {useSharedValue} from 'react-native-reanimated';
-import {vs} from "react-native-size-matters";
+import { vs } from "react-native-size-matters";  // Importamos la librería
 
-const {width} = Dimensions.get('window');
-const carouselHeight = vs(100);
-const imageWidth = vs(100);
-const imageHeight = vs(100);
+const { width } = Dimensions.get('window');
 
 interface Post {
-    "id": number,
-    "title": string,
-    "description": string,
-    "image": string,
-    "url": string,
-    "platform": string,
-    "start_date": string,
-    "end_date": string,
+    id: number;
+    title: string;
+    description: string;
+    image: string;
+    url: string;
+    platform: string;
+    start_date: string;
+    end_date: string;
 }
 
 interface Props {
     posts: Post[];
 }
 
-
-const PostCarousel: React.FC = ({posts}: Props) => {
-    const progress = useSharedValue<number>(0);
+const CarouselComponent = ({ posts }: Props) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     return (
         <View style={styles.container}>
             <Carousel
-                width={width}
-                height={carouselHeight}
+                loop={true}  // Carrusel infinito
+                autoPlay={true}  // AutoPlay habilitado
+                autoPlayInterval={3000}  // Intervalo de 3 segundos entre cada imagen
+                onSnapToItem={(index) => setCurrentIndex(index)}  // Actualizamos el índice actual
+                width={width}  // Establece el ancho del carrusel
+                height={vs(100)}  // Establece la altura de las imágenes
                 data={posts}
-                loop={true}
-                autoPlay={true}
-                autoPlayInterval={3000}
-                mode="parallax"
-                modeConfig={{
-                    parallaxScrollingScale: 0.95,
-                    parallaxScrollingOffset: 260,
-                }}
-                onProgressChange={(_, absoluteProgress) => {
-                    progress.value = absoluteProgress;
-                }}
-                renderItem={({item}) => (
-                    <View style={styles.itemContainer}>
-                        <Image source={{uri: item.image}} style={styles.image} resizeMode="cover"/>
+                renderItem={({ item }) => (
+                    <View style={styles.imageContainer}>
+                        <Image source={{ uri: item.image }} style={styles.image} />
                     </View>
                 )}
+                scrollAnimationDuration={1000}  // Duración de la animación de desplazamiento
+                // Ajuste para que el espacio entre imágenes sea de 5px
+                mode={"parallax"}
+                modeConfig={{
+                    parallaxScrollingScale: 1,
+                    parallaxScrollingOffset: vs(210),
+                }}
             />
         </View>
     );
@@ -57,18 +52,23 @@ const PostCarousel: React.FC = ({posts}: Props) => {
 
 const styles = StyleSheet.create({
     container: {
-        width,
-        height: carouselHeight,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    itemContainer: {
-        width,
-        height: carouselHeight,
+    imageContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     image: {
-        width: imageWidth,
-        height: imageHeight,
+        width: vs(100),  // Ajusta el tamaño de la imagen
+        height: vs(100),  // Ajusta el tamaño de la imagen
         borderRadius: 10,
+        resizeMode: 'cover',
+    },
+    carouselContent: {
+        marginHorizontal: 5,  // Espacio de 5px entre las imágenes
     },
 });
 
-export default PostCarousel;
+export default CarouselComponent;

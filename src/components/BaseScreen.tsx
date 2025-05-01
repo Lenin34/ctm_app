@@ -44,7 +44,7 @@ export default function BaseScreen({ children, scroll = true, style }: Props) {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#0B3F61' }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#0B3F61' }} edges={['top']}>
             <View style={StyleSheet.absoluteFill}>
                 <LinearGradient
                     colors={Gradients.blue}
