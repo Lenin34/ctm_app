@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "ctm_app",
-    "slug": "ctm_app",
+    "name": "SNT Móvil",
+    "slug": "snt-movil",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/SINDICATO_NACIONAL.png",
+    "icon": "./assets/images/favicon_SN_C_BC_lxl.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/SINDICATO_NACIONAL.png",
+      "image": "./assets/images/favicon_SN_C_BC_lxl.png",
       "resizeMode": "contain",
       "backgroundColor": "#0B3F61"
     },
@@ -16,13 +16,15 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.snt.msc",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/SINDICATO_NACIONAL.png",
+        "foregroundImage": "./assets/images/favicon_SN_C_BC_lxl.png",
         "backgroundColor": "#0B3F61"
       }
     },
     "web": {
-      "favicon": "./assets/images/SINDICATO_NACIONAL.png"
+      "favicon": "./assets/images/favicon_SN_C_BC_lxl.png"
     },
     "extra": {
       "eas": {
