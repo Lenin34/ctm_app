@@ -46,18 +46,36 @@ export const getProfile = async (): Promise<ApiResponse> => {
 
 
 /**
- * Actualiza el perfil del usuario.
+ * Limpia un objeto eliminando las claves con valores `undefined`
  */
-export const updateProfile = async (userId: number, formData: FormData) => {
+const cleanPayload = (data: Record<string, any>) =>
+    Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined));
+
+export const updateProfile = async (userId: number, formData: Record<string, any>) => {
     try {
-        const response = await axios.post(`/users/${userId}/profile`, formData, {
+        console.log('🟡 Enviando actualización de perfil...');
+        console.log('➡️  ID de usuario:', userId);
+        console.log('📦 Datos originales:', formData);
+
+        const cleanedFormData = cleanPayload(formData);
+
+        console.log('📦 Datos limpiados (sin undefined):', cleanedFormData);
+
+
+        const response = await axios.post(`${API_URL}/users/${userId}/profile`, cleanedFormData, {
             headers: {
-                'Content-Type': 'multipart/form-data',
+                'Content-Type': 'application/json',
             },
         });
+
+        console.log('✅ Respuesta del servidor:', response.data);
         return response.data;
     } catch (error: any) {
-        console.error('Error al actualizar perfil:', error);
-        return { error: true, msg: error.response?.data?.message || 'Error desconocido' };
+        console.error('❌ Error al actualizar perfil:', error.message);
+        console.log('📛 Respuesta del servidor (error):', error?.response?.data);
+        return {
+            error: true,
+            msg: error?.response?.data?.message || 'Error desconocido',
+        };
     }
 };

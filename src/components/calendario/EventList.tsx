@@ -6,7 +6,7 @@ import {
     TouchableOpacity,
     StyleSheet,
 } from 'react-native';
-import { X } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import { mvs, vs } from 'react-native-size-matters';
 import Animated, {
     measure,
@@ -90,7 +90,7 @@ const EventList = ({ numeroEventos, eventos }: Props) => {
                         </Text>
                     </View>
                     <TouchableOpacity onPress={handleToggle} style={styles.closeButton}>
-                        <X color="white" size={mvs(20)} strokeWidth={3} />
+                        <Feather name="x" size={mvs(20)} color="white" />
                     </TouchableOpacity>
                 </View>
 

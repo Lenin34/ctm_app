@@ -29,7 +29,13 @@ export default function ProfileActions({
         <>
 
             <View style={styles.buttonRow}>
-                <TouchableOpacity style={styles.updateButton} onPress={handlePrimaryAction}>
+                <TouchableOpacity
+                    style={[
+                        styles.updateButton,
+                        isEditing && {backgroundColor: '#1ABC9C'}
+                    ]}
+                    onPress={handlePrimaryAction}
+                >
                     <Ionicons name="create-outline" size={16} color="#fff"/>
                     <Text style={styles.buttonText}>
                         {isEditing ? 'GUARDAR' : 'ACTUALIZAR'}
@@ -37,7 +43,7 @@ export default function ProfileActions({
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.passwordButton} onPress={onChangePassword}>
-                    <Ionicons name="lock-closed-outline" size={16} color="#fff" />
+                    <Ionicons name="lock-closed-outline" size={16} color="#fff"/>
                     <Text style={styles.buttonText}>CAMBIAR CONTRASEÑA</Text>
                 </TouchableOpacity>
 

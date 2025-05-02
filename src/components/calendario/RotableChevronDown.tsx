@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import Animated, { useAnimatedStyle, SharedValue } from "react-native-reanimated";
-import { ChevronDown } from "lucide-react-native";
+import { Feather } from '@expo/vector-icons';
 import { mvs } from "react-native-size-matters";
 
 type Props = {
@@ -15,7 +15,7 @@ const RotableChevronDown = ({ progress }: Props) => {
 
     return (
         <Animated.View style={iconStyle}>
-            <ChevronDown color="white" size={mvs(20, 0.75)} strokeWidth={3} />
+            <Feather name="chevron-down" size={mvs(20)} color="white" />
         </Animated.View>
     );
 };

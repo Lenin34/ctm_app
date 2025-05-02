@@ -83,7 +83,7 @@ export default function ProfileForm({ formData, isEditing, setFormData }: Props)
                         <View key={index} style={styles.fieldContainer}>
                             <Text style={styles.label}>
                                 {key
-                                    .replace(/([A-Z])/g, ' $1') // separa palabras mayúsculas
+                                    .replace(/([A-Z])/g, ' $1')
                                     .replace(/^./, (str) => str.toUpperCase())}
                             </Text>
                             <View style={styles.inputBox}>

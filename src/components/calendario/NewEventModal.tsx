@@ -1,8 +1,7 @@
 import {Modal, TouchableWithoutFeedback, View, StyleSheet, Text, TouchableOpacity} from "react-native";
 import {mvs, vs} from "react-native-size-matters";
 import { BlurView } from "expo-blur";
-import {X, ChevronDown} from "lucide-react-native";
-
+import { Feather } from '@expo/vector-icons';
 
 type Props = {
     visible: boolean;
@@ -18,7 +17,7 @@ export default function NewEventModal({visible, setVisible, eventos}: Props) {
                         <View style={styles.rowTitle}>
                             <Text style={styles.textTitle}>¡ALERTA!</Text>
                             <TouchableOpacity style={styles.close} onPress={() => setVisible(false)}>
-                                <X color="white" size={mvs(20,0.75)}  strokeWidth={3}/>
+                                <Feather name="x" color="white" size={mvs(20, 0.75)} />
                             </TouchableOpacity>
                         </View>
                         <View style={{marginVertical: vs(6)}}>
@@ -27,7 +26,7 @@ export default function NewEventModal({visible, setVisible, eventos}: Props) {
                         <View >
                             <TouchableOpacity style={styles.row} onPress={() => setVisible(false)}>
                                 <Text style={styles.textLink}>Ver eventos</Text>
-                                <ChevronDown color="white" size={mvs(20,0.75)} strokeWidth={3}/>
+                                <Feather name="chevron-down" color="white" size={mvs(20, 0.75)} />
                             </TouchableOpacity>
                         </View>
                     </View>

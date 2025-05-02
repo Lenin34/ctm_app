@@ -16,7 +16,7 @@ import Title from '../components/common/Title';
 import { newPasswordStyles as styles } from '../styles/newPasswordStyles';
 import { resetPassword } from '../services/emailVerificationService';
 import { showApiErrorAlert, showSuccessAlert } from '../utils/alertUtils';
-import { Eye, EyeOff } from 'lucide-react-native';
+import { Feather } from '@expo/vector-icons';
 import ActivityOverlay from '../components/common/ActivityOverlay';
 import ConfettiCannon from 'react-native-confetti-cannon';
 
@@ -95,7 +95,10 @@ export default function NewPasswordScreen({ route, navigation }: any) {
                                 onPress={() => setShowPassword(!showPassword)}
                                 style={styles.eyeIcon}
                             >
-                                {showPassword ? <EyeOff size={22} color="#000" /> : <Eye size={22} color="#000" />}
+                                {showPassword
+                                    ? <Feather name="eye-off" size={22} color="#000" />
+                                    : <Feather name="eye" size={22} color="#000" />
+                                }
                             </TouchableOpacity>
                         </View>
 
@@ -112,7 +115,10 @@ export default function NewPasswordScreen({ route, navigation }: any) {
                                 onPress={() => setShowConfirmPassword(!showConfirmPassword)}
                                 style={styles.eyeIcon}
                             >
-                                {showConfirmPassword ? <EyeOff size={22} color="#000" /> : <Eye size={22} color="#000" />}
+                                {showConfirmPassword
+                                    ? <Feather name="eye-off" size={22} color="#000" />
+                                    : <Feather name="eye" size={22} color="#000" />
+                                }
                             </TouchableOpacity>
                         </View>
 
