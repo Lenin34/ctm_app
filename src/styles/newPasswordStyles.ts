@@ -1,59 +1,59 @@
 // src/styles/newPasswordStyles.ts
 
-import { StyleSheet } from 'react-native';
-import { mvs, ms } from 'react-native-size-matters';
+import { StyleSheet, Dimensions } from 'react-native';
+import { vs, mvs } from 'react-native-size-matters';
+
+const { width } = Dimensions.get('window');
 
 export const newPasswordStyles = StyleSheet.create({
     wrapper: {
         flex: 1,
         justifyContent: 'center',
+        paddingHorizontal: mvs(20),
     },
     card: {
-        alignItems: 'center',
-        backgroundColor: '#a5b1bf',
-        marginHorizontal: 20,
-        paddingVertical: 30,
-        borderRadius: 30,
+        backgroundColor: 'rgb(66,111,161)',
+        borderRadius: 20,
+        paddingVertical: mvs(30),
+        paddingHorizontal: mvs(20),
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.2,
         shadowRadius: 6,
-        elevation: 5,
+        elevation: 10,
+    },
+    inputContainer: {
+        position: 'relative',
+        marginBottom: mvs(20),
     },
     input: {
-        width: '90%',
         backgroundColor: '#fff',
-        borderRadius: 30,
-        paddingHorizontal: 12,
-        paddingVertical: 13,
-        fontSize: 16,
-        marginBottom: mvs(4),
+        borderRadius: 12,
+        paddingVertical: vs(12),
+        paddingHorizontal: vs(16),
+        fontSize: vs(14),
+        color: '#000',
+        borderWidth: 1,
+        borderColor: '#000000',
+    },
+    enhancedInput: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 3,
+    },
+    eyeIcon: {
+        position: 'absolute',
+        right: 12,
+        top: '35%',
+        transform: [{ translateY: -4 }],
     },
     button: {
-        width: '90%',
-        backgroundColor: '#02AF14',
+        backgroundColor: '#f8931e',
+        paddingVertical: mvs(6),
         borderRadius: 30,
-        paddingVertical: 14,
         alignItems: 'center',
         marginTop: mvs(10),
     },
-    buttonText: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: ms(16),
-    },
-    inputContainer: {
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        borderRadius: 20,
-        marginBottom: 20,
-        paddingHorizontal: 16,
-    },
-    eyeIcon: {
-        marginLeft: -36,
-        zIndex: 1,
-    },
-
 });

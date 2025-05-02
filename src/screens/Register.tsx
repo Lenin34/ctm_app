@@ -4,7 +4,7 @@ import BaseScreen from '../components/BaseScreen';
 import { registerStyles as styles } from '../styles/registerStyles';
 import LogoSN from "../components/svg/LogoSN";
 import { useAuth } from '../context/AuthContext';
-import {showApiErrorAlert, showErrorAlert} from '../utils/alertUtils';
+import { showErrorAlert, showApiErrorAlert,showSuccessAlert } from '../utils/alertUtils';
 import CompanySelector from '../components/common/CompanySelector';
 import { mvs, vs } from "react-native-size-matters";
 import ActivityOverlay from '../components/common/ActivityOverlay';
@@ -52,7 +52,7 @@ export default function Register({ navigation }: any) {
                 setLoading(false);
                 showApiErrorAlert('La solicitud está tardando demasiado. Verifica tu conexión e intenta de nuevo.');
                 console.error('⏰ Tiempo de espera agotado en el registro.');
-            }, 10000); // 10 segundos
+            }, 10000);
 
             try {
                 console.log('⏳ Intentando registrar:', form);
@@ -75,11 +75,15 @@ export default function Register({ navigation }: any) {
                 if (response?.error) {
                     console.error('❌ Error al registrar:', response);
                     showErrorAlert(response);
-                } else {
+                }else {
+                    showSuccessAlert(
+                        '✅ Registro exitoso',
+                        'Tu cuenta fue creada correctamente. Ahora puedes iniciar sesión.'
+                    );
                     navigation.navigate('Login', { userId: response.user_id });
                 }
             } catch (error) {
-                clearTimeout(timeout); // 👈 Limpia también si falla
+                clearTimeout(timeout);
                 console.error('❌ Excepción capturada:', error);
                 showErrorAlert({ error: { code: 'GENERIC_ERROR', message: 'Error inesperado.' } });
             } finally {
@@ -87,8 +91,6 @@ export default function Register({ navigation }: any) {
             }
         }
     };
-
-
 
     return (
         <BaseScreen>
@@ -116,13 +118,13 @@ export default function Register({ navigation }: any) {
                 />
                 {errors.workerId && <Text style={styles.errorText}>{errors.workerId}</Text>}
 
-                {/* CURP */}
                 <Text style={styles.label}>CURP</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="CURP"
+                    autoCapitalize="characters"
                     value={form.curp}
-                    onChangeText={(val) => handleChange('curp', val)}
+                    onChangeText={(val) => handleChange('curp', val.toUpperCase())}
                 />
                 {errors.curp && <Text style={styles.errorText}>{errors.curp}</Text>}
 
