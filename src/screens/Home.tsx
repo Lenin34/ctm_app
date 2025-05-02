@@ -11,6 +11,7 @@ import {useBenefits} from "../hooks/useBenefits";
 import {useAuth} from "../context/AuthContext";
 import {usePost} from "../hooks/usePost";
 import {formatDateForBanner} from "../hooks/formatDateForBanner";
+import formatYMD from "../hooks/formatYMD";
 
 const posts = [
     require('../../assets/images/1.jpg'),
@@ -46,15 +47,21 @@ export default function Home({ navigation }: any) {
     const { authState } = useAuth();
     const [benefits, setBenefits] = useState<Benefit[]>([])
     const [post, setPost] = useState<Post[]>([])
+    const today = new Date();
+    const start_date = formatYMD(today, 0, true)
+    const end_date = formatYMD(today, 1, true)
+
 
     const {loadingPost, errorPost} = usePost({
         company_id: authState?.user?.company_id,
         token: authState?.token,
-        start_date: '',
-        end_date: '',
+        start_date: start_date,
+        end_date: end_date,
         amount: 5,
         setPost
     })
+
+    console.log('errorPost', errorPost)
 
     const {loadingBenefits, errorBenefits} = useBenefits({
         companyId: authState?.user?.company_id,
@@ -93,8 +100,6 @@ export default function Home({ navigation }: any) {
         ).start();
     }, []);
 
-    console.log(post)
-
     return (
         <BaseScreen>
             <Header/>
@@ -104,42 +109,35 @@ export default function Home({ navigation }: any) {
 
                     {!loadingPost ? (
                         <>
-                            {!errorPost ? (
-                                <>
-                                    {/* POSTS */}
-                                    <Animatable.View animation="fadeInUp" delay={300}>
-                                        <Text style={styles.sectionTitle}>LO ÚLTIMO EN REDES SOCIALES</Text>
-                                        <Carusel posts={post}/>
-                                    </Animatable.View>
+                            {/* POSTS */}
+                            <Animatable.View animation="fadeInUp" delay={300}>
+                                <Text style={styles.sectionTitle}>LO ÚLTIMO EN REDES SOCIALES</Text>
+                                <Carusel posts={post}/>
+                            </Animatable.View>
 
-                                    {/* EVENTO */}
-                                    <Animatable.View animation="fadeInUp" delay={500} style={{alignSelf: 'center'}}>
-                                        <Text style={styles.sectionTitle}>
-                                            ¡LO QUE SE VIENE!
-                                        </Text>
+                            {/* EVENTO */}
+                            <Animatable.View animation="fadeInUp" delay={500} style={{alignSelf: 'center'}}>
+                                <Text style={styles.sectionTitle}>
+                                    ¡LO QUE SE VIENE!
+                                </Text>
 
-                                        <Image
-                                            source={{ uri: post[0].image }}
-                                            style={{
-                                                width: width * 0.9,  // 👈 ahora sí
-                                                height: (width * 0.9) * 9 / 16, // 👈 altura proporcional (opcional, para 16:9)
-                                                borderRadius: 10,
-                                            }}
-                                            resizeMode={"cover"}
-                                        />
+                                <Image
+                                    source={{ uri: post[0].image }}
+                                    style={{
+                                        width: width * 0.9,  // 👈 ahora sí
+                                        height: (width * 0.9) * 9 / 16, // 👈 altura proporcional (opcional, para 16:9)
+                                        borderRadius: 10,
+                                    }}
+                                    resizeMode={"cover"}
+                                />
 
-                                        <View style={styles.imageInfo}>
-                                            <Text style={styles.infoTitle}>{post[0].title}</Text>
-                                            <Text style={styles.infoDate}>{formatDateForBanner(post[0].start_date, post[0].end_date)}</Text>
-                                        </View>
-
-                                    </Animatable.View>
-                                </>
-                            ) : (
-                                <View>
-                                    <Text>Error al cargar post</Text>
+                                <View style={styles.imageInfo}>
+                                    <Text style={styles.infoTitle}>{post[0].title}</Text>
+                                    <Text style={styles.infoDate}>{formatDateForBanner(post[0].start_date, post[0].end_date)}</Text>
                                 </View>
-                            )}
+
+                            </Animatable.View>
+
                         </>
                     ) : (
                         <ActivityIndicator size={"large"} color={'#fffff'}/>
