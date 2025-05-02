@@ -122,7 +122,7 @@ export default function Login({navigation}: any) {
                             <Text style={styles.loginText}>INGRESAR</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> navigation.navigate('ForgotPassword')}>
                             <Text style={styles.link}>Olvidé mi contraseña</Text>
                         </TouchableOpacity>
 
@@ -138,11 +138,14 @@ export default function Login({navigation}: any) {
                             </TouchableOpacity>
                         </View>
 
-                        <View style={{alignSelf: 'center', bottom: 0, position: 'absolute', marginBottom: mvs(30)}}>
-                            <TouchableOpacity onPress={() => navigation.navigate('AvisoPrivacidad')}>
-                                <Text style={styles.link1}>Aviso de privacidad</Text>
-                            </TouchableOpacity>
-                        </View>
+                        <TouchableOpacity
+                            style={{ marginTop: vs(20), alignSelf: 'center' }}
+                            onPress={() => navigation.navigate('AvisoPrivacidad')}
+                        >
+                            <Text style={styles.link1}>Aviso de privacidad</Text>
+                        </TouchableOpacity>
+
+
                     </ScrollView>
                 </View>
             </KeyboardAvoidingView>

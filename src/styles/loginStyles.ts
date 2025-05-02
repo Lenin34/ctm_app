@@ -9,6 +9,7 @@ export const loginStyles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
         paddingTop: vs(60),
+        paddingBottom: vs(40),
         alignItems: 'center',
     },
     wrapper: {
@@ -90,4 +91,5 @@ export const loginStyles = StyleSheet.create({
         marginTop: 5,
         marginLeft: 5,
     },
+
 });
