@@ -3,6 +3,7 @@ import axios from 'axios';
 import { API_URL } from '../constants/config';
 import { ApiResponse } from './profileService';
 import * as SecureStore from 'expo-secure-store';
+import { getItem } from '../utils/SecureStoreWrapper';
 
 export interface RegisterPayload {
     curp: string;
@@ -59,18 +60,20 @@ export const registerUser = async (payload: RegisterPayload) => {
 /**
  * Obtener el perfil del usuario autenticado (GET ).
  */
-export const getProfile = async (): Promise<ApiResponse> => {
+export const getProfile = async (userIdOverride?: number): Promise<ApiResponse> => {
     try {
-        const userIdStr = await SecureStore.getItemAsync('user_id');
+        let userId = userIdOverride;
 
-        if (!userIdStr) {
-            return {
-                error: true,
-                msg: 'No se encontró el ID del usuario en SecureStore.'
-            };
+        if (!userId) {
+            const userIdStr = await getItem('user_id');
+            if (!userIdStr) {
+                return {
+                    error: true,
+                    msg: 'No se encontró el ID del usuario en SecureStore.'
+                };
+            }
+            userId = parseInt(userIdStr, 10);
         }
-
-        const userId = parseInt(userIdStr, 10);
 
         const { data } = await axios.get(`${API_URL}/users/${userId}/profile`);
         return {

@@ -22,6 +22,7 @@ import LogoSN from "../components/svg/LogoSN";
 import AvisoPrivacidad from "./AvisoPrivacidad";
 import {useAuth} from '../context/AuthContext';
 import {Alert} from 'react-native';
+import GoogleLoginButton from "../components/buttons/GoogleLoginButton";
 
 
 export default function Login({navigation}: any) {
@@ -121,6 +122,8 @@ export default function Login({navigation}: any) {
                         <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
                             <Text style={styles.loginText}>INGRESAR</Text>
                         </TouchableOpacity>
+
+                        <GoogleLoginButton />
 
                         <TouchableOpacity onPress={()=> navigation.navigate('ForgotPassword')}>
                             <Text style={styles.link}>Olvidé mi contraseña</Text>

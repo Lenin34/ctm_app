@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "SNT Móvil",
-    "slug": "snt-movil",
+    "slug": "ctm_app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/favicon_SN_C_BC_lxl.png",
@@ -12,12 +12,14 @@
       "resizeMode": "contain",
       "backgroundColor": "#0B3F61"
     },
+    "scheme": "sntmovil",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.snt.msc"
     },
     "android": {
       "package": "com.snt.msc",
-      "versionCode": 1,
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/favicon_SN_C_BC_lxl.png",
         "backgroundColor": "#0B3F61"
@@ -30,6 +32,10 @@
       "eas": {
         "projectId": "57575f7b-284c-413e-8a60-0f90bb9faac8"
       }
-    }
+    },
+    "plugins": [
+      "expo-web-browser",
+      "expo-secure-store"
+    ]
   }
 }

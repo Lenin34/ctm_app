@@ -38,3 +38,10 @@ yarn-error.*
 # react-native android & ios
 .android/
 .ios/
+
+# Keystore
+@*.jks
+android-keystore/
+
+#Credentials
+credentials.txt

@@ -50,14 +50,17 @@ export const loginStyles = StyleSheet.create({
     loginBtn: {
         backgroundColor: '#005ea6',
         borderRadius: 30,
-        marginTop: 20,
-        paddingVertical: vs(8),
+        paddingVertical: vs(10),
+        paddingHorizontal: vs(16),
         alignItems: 'center',
-        width: vs(125)
+        marginTop: vs(20),
+        width: vs(220),
+        alignSelf: 'center',
     },
     loginText: {
         color: '#fff',
         fontWeight: 'bold',
+        fontSize: vs(13),
     },
     link: {
         color: '#ccc',
